@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Written by: panku
-#  Thanks to: o1, deesix, genunix
+# Thanks to: o1, deesix, genunix
 
 # Source code is hosted on : "https://www.genunix.com"
 # Pastebin is hosted on    : "https://www.oetec.com/pastebin"
