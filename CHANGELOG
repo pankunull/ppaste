@@ -1,0 +1,16 @@
+Changelog 0.4.42:
+   - moved host to Github
+
+
+Changelog 0.4.41:
+   - improved version check using grep with REGEX
+   - added hash check
+   - added 'force upgrade' function
+   - changed banner
+   - added download function for alive links
+   - new help menu
+   - added 'show_history_full' function with table format
+
+Changelog 0.4.40:
+   - fixed bug in check_lifetime
+

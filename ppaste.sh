@@ -6,29 +6,17 @@
 # Source code is hosted on : "https://www.genunix.com"
 # Pastebin is hosted on    : "https://www.oetec.com/pastebin"
 
-# Changelog 0.4.41:
-#    - improved version check using grep with REGEX
-#    - added hash check
-#    - added 'force upgrade' function
-#    - changed banner
-#    - added download function for alive links
-#    - new help menu
-#    - added 'show_history_full' function with table format
-
-# Changelog 0.4.40:
-#    - fixed bug in check_lifetime
-
-
-
 
 # -----------------------------------------------------------------------------
 
 
 # global variables
 
-_version=0.4.41
-_source='https://www.genunix.com/panku/pankupaste/ppaste.sh'
-_sha256='https://www.genunix.com/panku/pankupaste/sha256sum.txt'
+_version=0.4.42
+#_source='https://www.genunix.com/panku/pankupaste/ppaste.sh'
+#_sha256='https://www.genunix.com/panku/pankupaste/sha256sum.txt'
+_source='https://raw.githubusercontent.com/pankunull/ppaste/main/ppaste.sh'
+_sha256='https://raw.githubusercontent.com/pankunull/ppaste/main/sha256sum.txt'
 _width=120
 _columns="$(stty size | cut -d ' ' -f2)"
 _expiretime=0
