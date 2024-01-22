@@ -15,8 +15,8 @@
 _version=0.4.42
 #_source='https://www.genunix.com/panku/pankupaste/ppaste.sh'
 #_sha256='https://www.genunix.com/panku/pankupaste/sha256sum.txt'
-_source='https://raw.githubusercontent.com/pankunull/ppaste/main/ppaste.sh'
-_sha256='https://raw.githubusercontent.com/pankunull/ppaste/main/sha256sum.txt'
+_source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
+_sha256='https://raw.githubusercontent.com/pankunull/ppaste/main/sign/sha256sum.txt'
 _width=120
 _columns="$(stty size | cut -d ' ' -f2)"
 _expiretime=0
