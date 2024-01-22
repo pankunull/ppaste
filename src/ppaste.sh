@@ -559,7 +559,7 @@ while getopts 'hvuUt:l:L:c:o:Dfpdme:s' _option; do
             upgrade
             ;;
         U)
-            upgrade
+            force_upgrade
             ;;
 
         t)
