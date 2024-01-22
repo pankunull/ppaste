@@ -1,3 +1,5 @@
 #!/bin/sh
 
-openssl sha256 ppaste.sh | cut -d ' ' -f2 > sha256sum.txt
+sha256sum  src/ppaste.sh > sign/sha256sum.txt
+
+cat sign/sha256sum.txt
