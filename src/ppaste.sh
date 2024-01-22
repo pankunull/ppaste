@@ -545,7 +545,7 @@ save_pastebin()
 
 # Process arguments
 #
-while getopts 'hvut:l:L:c:o:Dfpdme:s' _option; do
+while getopts 'hvuUt:l:L:c:o:Dfpdme:s' _option; do
     case "$_option" in
         h) 
             show_usage
@@ -556,6 +556,9 @@ while getopts 'hvut:l:L:c:o:Dfpdme:s' _option; do
             ;;
 
         u)
+            upgrade
+            ;;
+        U)
             upgrade
             ;;
 
