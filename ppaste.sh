@@ -178,18 +178,8 @@ upgrade()
 
     # if [ "$(echo "$VERSION_GRABBER > $PASTEBIN_VERSION" | bc -l)" -eq 1 ]; then
     #       ^ this is the old method using bc
-
-    #if [ "$(echo "$_sourceversion" | tr -d '.')" -le \
-    #     "$(echo "$_version" | tr -d '.')" ]; then
-    #
-    #    printf "Up-to-date\n"
-    #    exit 0
-    #fi
-
-    # new method using grep + regex
-    if printf '%s\n' $_version $_sourceversion | \
-                     sort --version-sort --check &>/dev/null; then
-        
+    if [ "$(echo "$_sourceversion" | tr -d '.')" -le \
+         "$(echo "$_version" | tr -d '.')" ]; then
         printf "Up-to-date\n\n"
         
         if [ "$_sourcehash" != "$_localhash" ]; then
