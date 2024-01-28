@@ -12,7 +12,7 @@
 
 # global variables
 
-_version=0.4.42
+_version=0.4.43
 #_source='https://www.genunix.com/panku/pankupaste/ppaste.sh'
 #_sha256='https://www.genunix.com/panku/pankupaste/sha256sum.txt'
 _source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
@@ -30,9 +30,7 @@ _downloaddir=~/."$_name"/download
 _textflag=1
 _maxsize=300000000
 _pwcmd='curl --silent --connect-timeout 3 --max-time 10 --location'
-_localhash="$(openssl sha256 -r "$_dir/$_name" | cut -d' ' -f1)"
-
-
+_localhash="$(sha256sum "$_dir"/"$_name" | cut -d ' ' -f1)"
 
 
 # -----------------------------------------------------------------------------
@@ -56,21 +54,18 @@ fi
 # horizontal split
 split()
 {
-    printf -- ":%.0s" $(seq 1 $_columns)
+    printf -- ":%.0s" $(seq 1 "$_columns")
     printf "\n\n"
 }
 
 
 
 # banner
-printf """
-          /-  $_name - $_version
-PPASTE -- |-  $_history_print
-          \-  $_download_print
+printf "\n           /-  %s - %s" "$_name" "$_version"
+printf "\nPPASTE -- |-   %s" 	  "$_history_print"
+printf "\n           \-  %s\n\n"  "$_download_print"
+printf "%s" "$(split)"
 
-$(split)
-
-"""
 
 
 
@@ -168,7 +163,7 @@ upgrade()
         exit 1
     fi
 
-    _sourcehash="$($_pwcmd --url $_sha256)"
+    _sourcehash="$($_pwcmd --url $_sha256 | cut -d ' ' -f1)"
 
     printf "Local version  : %s\n" "$_version"
     printf "%s\n\n" "$_localhash"
@@ -373,10 +368,10 @@ show_history_full()
 
         printf -- "-%.0s" $(seq 1 107) ; printf "\n"
         
-        while read _LINE; do
-            _LLINK="$(printf "$_LINE" | cut -d ',' -f1)"
-            _LEXPIRE="$(date -d @$(printf "$_LINE" | cut -d ',' -f2))"
-            _LCREATED="$(date -d @$(printf "$_LINE" | cut -d ',' -f3))"
+        while read -r _LINE; do
+            _LLINK="$(echo "$_LINE" | cut -d ',' -f1)"
+            _LEXPIRE="$(date -d @"$(echo "$_LINE" | cut -d ',' -f2)")"
+            _LCREATED="$(date -d @"$(echo "$_LINE" | cut -d ',' -f3)")"
             
             printf "%s | %s | %s\n" "$_LLINK" "$_LCREATED" "$_LEXPIRE"
         done < "$_historyfile"
@@ -458,7 +453,7 @@ download()
 
     
     if [ ! -d "$_downloaddir" ]; then
-        printf "Creating download folder in $_downloaddir\n"
+        printf "Creating download folder in %s\n" "$_downloaddir"
 
         if mkdir -v -p "$_downloaddir" 2>/dev/null; then
             printf "ERROR: can't create the download folder.\n"
@@ -473,7 +468,7 @@ download()
     for _link in $_historylinks; do
         printf "Downloading -> %s\n" "$_link"
 
-        curl --progress-bar -4 --max-time 60 --connect-timeout 5 -L --url "$_link" -O --output-dir $_downloaddir
+        curl --progress-bar -4 --max-time 60 --connect-timeout 5 -L --url "$_link" -O --output-dir "$_downloaddir"
 
         printf "\n" ; split
     done
