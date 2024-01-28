@@ -1,3 +1,8 @@
+Changelog 0.4.45:
+    - cleaned the code
+    - added posix tag
+    - added space after banner
+
 Changelog 0.4.44:
     - fixed an issue where links would not appear after
       the progress bar if one of the output flag was used 

@@ -3,16 +3,18 @@
 # Written by: panku
 # Thanks to: o1, deesix, genunix
 
-# Source code is hosted on : "https://www.genunix.com"
+# Source code is hosted on : "https://www.github.com"
 # Pastebin is hosted on    : "https://www.oetec.com/pastebin"
+
+# POSIX
+
 
 
 # -----------------------------------------------------------------------------
 
-
 # global variables
 
-_version=0.4.44
+_version=0.4.45
 #_source='https://www.genunix.com/panku/pankupaste/ppaste.sh'
 #_sha256='https://www.genunix.com/panku/pankupaste/sha256sum.txt'
 _source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
@@ -32,6 +34,8 @@ _textflag=1
 _maxsize=300000000
 _pwcmd='curl --silent --connect-timeout 3 --max-time 10 --location'
 _localhash="$(sha256sum "$_dir"/"$_name" | cut -d ' ' -f1)"
+
+
 
 
 # -----------------------------------------------------------------------------
@@ -60,8 +64,6 @@ split()
 }
 
 
-
-# banner
 printf "\n           /-  %s - %s" "$_name" "$_version"
 printf "\nPPASTE -- |-   %s" 	  "$_history_print"
 printf "\n           \-  %s\n\n"  "$_download_print"
@@ -71,9 +73,6 @@ printf "%s\n\n" "$(split)"
 
 
 # -----------------------------------------------------------------------------
-
-
-
 
 # show_usage
 #     Display usage information for this utility.
@@ -431,6 +430,7 @@ check_lifetime()
 
 
 
+
 # download
 #    Download alive history
 download()
@@ -639,7 +639,11 @@ else
 fi
 
 
+
+
 # -----------------------------------------------------------------------------
+
+
 
 
 # Looping through files
@@ -710,24 +714,27 @@ for _file in $_args; do
                    https://www.oetec.com/post                      \
                    )"; then
 
-            # Check 404 from website
+
+            # Check if server is returning 404
             if echo "$_data" | grep "404" 1>/dev/null; then
                 printf "ERROR: 404 - page not found.\n\n"
                 exit 1
             fi
      
-
+            # POST check
             if echo "$_data" | grep -i "fail" 1>/dev/null; then
                 printf "ERROR: POST failed, check variables.\n\n"
                 exit 1
             fi
 
+            # Hash print
             printf "\nHash: %s\n\n" "$(echo "$_data" | \
                                        sed '1p;d' | \
                                        rev | \
                                        cut -d '/' -f1 | \
                                        rev)"
-
+    
+            # Links print
 	        printf "%s\n" "$(echo "$_data" | sed '1p;d')"
 	        printf "%s\n" "$(echo "$_data" | sed '2p;d')"
             printf "%s\n\n" "$(echo "$_data" | sed '3p;d')"
@@ -754,7 +761,8 @@ for _file in $_args; do
                     _verbosemode='Lined';
                     _links="$_links $(echo "$_data" | sed '2p;d')" ;;
             esac
-            
+
+
             # History save
             if [ "$_history" -eq 0 ]; then
                 if [ "$_expiretime" -eq 0 ]; then
