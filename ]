@@ -344,10 +344,10 @@ show_history_full()
 
     case "$OPTARG" in
         alive)
-            _historylinks="$(awk -F\, '$2 < '"$(date +%s)"'' "$_historyfile")"
+            _historylinks="$(awk -F\, '$2 > '"$(date +%s)"'' "$_historyfile")"
             ;;
         dead)  
-            _historylinks="$(awk -F\, '$2 > '"$(date +%s)"'' "$_historyfile")"
+            _historylinks="$(awk -F\, '$2 < '"$(date +%s)"'' "$_historyfile")"
             ;;
         all)
             _historylinks="$(cat "$_historyfile")"
@@ -707,9 +707,9 @@ for _file in $_args; do
         
         # Filename or text
         if [ "$_textflag" -eq 0 ]; then
-            printf "%${_alignwidth}s : %s\n" "Sending" "$_textpaste"    
+            printf "\n%${_alignwidth}s : %s\n" "Sending" "$_textpaste"    
         else
-            printf "%${_alignwidth}s : %s\n" "Sending" "$(basename "$_file")"
+            printf "\n%${_alignwidth}s : %s\n" "Sending" "$(basename "$_file")"
         fi
         
         # Curl the file

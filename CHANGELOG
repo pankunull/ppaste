@@ -1,3 +1,9 @@
+Changelog 0.4.46:
+    - removed '--max-time' option
+    - improved output format when sending file/text
+    - fixed error in show history (alive/dead links)
+    - fixed error where expired date wasn't correctly converted from epoch
+
 Changelog 0.4.45:
     - cleaned the code
     - added posix tag
