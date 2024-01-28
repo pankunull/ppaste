@@ -12,7 +12,7 @@
 
 # global variables
 
-_version=0.4.43
+_version=0.4.44
 #_source='https://www.genunix.com/panku/pankupaste/ppaste.sh'
 #_sha256='https://www.genunix.com/panku/pankupaste/sha256sum.txt'
 _source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
@@ -21,6 +21,7 @@ _width=120
 _columns="$(stty size | cut -d ' ' -f2)"
 _expiretime=0
 _verbose=0
+_verbosemode='None'
 _links=""
 _history=1
 _name="$(basename "$0")"
@@ -64,7 +65,7 @@ split()
 printf "\n           /-  %s - %s" "$_name" "$_version"
 printf "\nPPASTE -- |-   %s" 	  "$_history_print"
 printf "\n           \-  %s\n\n"  "$_download_print"
-printf "%s" "$(split)"
+printf "%s\n\n" "$(split)"
 
 
 
@@ -638,7 +639,6 @@ else
 fi
 
 
-
 # -----------------------------------------------------------------------------
 
 
@@ -716,7 +716,7 @@ for _file in $_args; do
                 exit 1
             fi
      
-            # Check if server return POST variables error
+
             if echo "$_data" | grep -i "fail" 1>/dev/null; then
                 printf "ERROR: POST failed, check variables.\n\n"
                 exit 1
@@ -728,27 +728,31 @@ for _file in $_args; do
                                        cut -d '/' -f1 | \
                                        rev)"
 
+	        printf "%s\n" "$(echo "$_data" | sed '1p;d')"
+	        printf "%s\n" "$(echo "$_data" | sed '2p;d')"
+            printf "%s\n\n" "$(echo "$_data" | sed '3p;d')"
+
+
             # Verbose output
-            # 0 - default output
             # 1 - full
             # 2 - plain
             # 3 - html
             # 4 - lined
             case $_verbose in
-                0)
-                    printf "%s\n" "$(echo "$_data" | sed '1p;d')"
-                    printf "%s\n" "$(echo "$_data" | sed '2p;d')"
-                    printf "%s\n\n" "$(echo "$_data" | sed '3p;d')" ;;
                 1)
-                    _links="$_links $(echo "$_data" | sed '1p;d')"
+                    _verbosemode='Html, Lined, Plain';
+                    _links="$_links $(echo "$_data" | sed '1p;d')";
                     _links="$_links $(echo "$_data" | sed '2p;d')";
                     _links="$_links $(echo "$_data" | sed '3p;d')" ;;
                 2)
-                    _links="$_links $(echo "$_data" | sed '2p;d')" ;;
+                    _verbosemode='Plain';
+                    _links="$_links $(echo "$_data" | sed '3p;d')" ;;
                 3)
+                    _verbosemode='HTML';
                     _links="$_links $(echo "$_data" | sed '1p;d')" ;;
                 4)
-                    _links="$_links $(echo "$_data" | sed '3p;d')" ;;
+                    _verbosemode='Lined';
+                    _links="$_links $(echo "$_data" | sed '2p;d')" ;;
             esac
             
             # History save
@@ -786,8 +790,8 @@ done
 
 
 # When all files are uploaded print links
-if [ -n "$_links" ]; then
-    printf "Links: \n\n"
+if [ "$_verbose" -gt 0 ] && [ -n "$_links" ]; then
+    printf "Links: %s\n\n" "$_verbosemode"
 
     for _line in $_links; do
         printf "%s\n" "$_line"

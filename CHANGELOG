@@ -1,3 +1,8 @@
+Changelog 0.4.44:
+    - fixed an issue where links would not appear after
+      the progress bar if one of the output flag was used 
+    - improved output for links at the end
+
 Changelog 0.4.43:
    - using sha256sum instead of openssl command
    - fixed all warning using "https://www.shellcheck.net/"
