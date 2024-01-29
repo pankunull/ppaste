@@ -13,7 +13,7 @@
 
 # global variables
 
-_version=0.4.49
+_version=0.4.50
 _source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
 _sha256='https://raw.githubusercontent.com/pankunull/ppaste/main/sign/sha256sum.txt'
 _width=120
@@ -161,10 +161,8 @@ upgrade()
     printf "%s\n\n" "$_sourcehash"
 
 
-    # if [ "$(echo "$VERSION_GRABBER > $PASTEBIN_VERSION" | bc -l)" -eq 1 ]; then
-    #       ^ this is the old method using bc
-    if [ "$(echo "$_sourceversion" | tr -d '.')" -le \
-         "$(echo "$_version" | tr -d '.')" ]; then
+    # Check version 
+    if [ "$_sourceversion" == "$_version" ]; then
         printf "Up-to-date\n\n"
         
         if [ "$_sourcehash" != "$_localhash" ]; then

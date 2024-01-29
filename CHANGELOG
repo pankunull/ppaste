@@ -1,3 +1,7 @@
+Changelog 0.4.50:
+    - simplified version check
+    - removed sha256sum.txt
+
 Changelog 0.4.49:
     - change split from ':' to '-'
     - added more informations to function 'check_lifetime'
