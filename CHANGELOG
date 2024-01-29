@@ -1,3 +1,7 @@
+Changelog 0.4.49:
+    - change split from ':' to '-'
+    - added more informations to function 'check_lifetime'
+
 Changelog 0.4.48:
     - reworked the whole 'show_history_full()' function
     - replaced while command to awk (+10x quicker)

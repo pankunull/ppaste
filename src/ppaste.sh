@@ -3,20 +3,17 @@
 # Written by: panku
 # Thanks to: o1, deesix, genunix
 
-# Source code is hosted on : "https://www.github.com"
+# Source code is hosted on : "https://www.github.com/pankunull/ppaste"
 # Pastebin is hosted on    : "https://www.oetec.com/pastebin"
 
 # POSIX
-
 
 
 # -----------------------------------------------------------------------------
 
 # global variables
 
-_version=0.4.48
-#_source='https://www.genunix.com/panku/pankupaste/ppaste.sh'
-#_sha256='https://www.genunix.com/panku/pankupaste/sha256sum.txt'
+_version=0.4.49
 _source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
 _sha256='https://raw.githubusercontent.com/pankunull/ppaste/main/sign/sha256sum.txt'
 _width=120
@@ -59,7 +56,7 @@ fi
 # horizontal split
 split()
 {
-    printf -- ":%.0s" $(seq 1 "$_columns")
+    printf -- "-%.0s" $(seq 1 "$_columns")
     printf "\n\n"
 }
 
@@ -409,10 +406,14 @@ check_lifetime()
     fi
 
     # Parse all information
+    _hash="$(echo "$OPTARG" | rev | cut -d '/' -f1 | rev)"
+
+    _type="$(echo "$_headers" | grep "Type: " | cut -d ' ' -f2-)" 
+
     _headers="$(echo "$_headers" | tr -d '\r')"
 
-    _borndate="$(echo "$_headers" | grep "Date: " | cut -d ' ' -f3-6 | tr -d ',')" 
-    _expiredate="$(echo "$_headers" | grep "Expires: " | cut -d ' ' -f3-6 | tr -d ',')"
+    _borndate="$(echo "$_headers" | grep "Date: " | cut -d ' ' -f2-)" 
+    _expiredate="$(echo "$_headers" | grep "Expires: " | cut -d ' ' -f2-)"
 
     _bornsec="$(date -d "$_borndate" +%s 2>/dev/null || \
                 date -j -f %d%b%Y%H%M%S "$(echo "$_borndate" | tr -d ' :')" +%s)"
@@ -422,10 +423,13 @@ check_lifetime()
 
     _difference=$(( _expiresec - _bornsec ))
 
-    printf "Created: %s\n" "$_borndate"
-    printf "Expires: %s\n" "$_expiredate"
+    printf "%${_alignwidth}s : %s\n" "Hash" "$_hash"
+    printf "%${_alignwidth}s : %s\n" "Type" "$_type"
+    printf "%${_alignwidth}s : %s\n" "Created" "$_borndate"
+    printf "%${_alignwidth}s : %s\n" "Epires" "$_expiredate"
 
-    printf "Timer  : %sd %sh %sm %ss\n\n" \
+    printf "%${_alignwidth}s : %sd %sh %sm %ss\n\n" \
+        "Timer" \
         "$((  _difference / 86400))" \
         "$(( (_difference % 86400) / 3600))" \
         "$(( (_difference % 3600) / 60))" \
