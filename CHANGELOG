@@ -1,3 +1,9 @@
+Changelog 0.4.52:
+    - improved 'download' function
+    - added file name in the history file
+    - reworked 'show_history_full'
+    - changed ppaste directory from ~/.ppaste to ~/ppaste
+
 Changelog 0.4.51:
     - added 'delete_history' function
     - fixed 'download' function

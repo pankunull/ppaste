@@ -13,7 +13,7 @@
 
 # global variables
 
-_version=0.4.51
+_version=0.4.52
 _source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
 _sha256='https://raw.githubusercontent.com/pankunull/ppaste/main/sign/sha256sum.txt'
 _pastebin="https://www.oetec.com/pastebin"
@@ -26,9 +26,9 @@ _links=""
 _history=1
 _name="$(basename "$0")"
 _dir="$(dirname "$0")"
-_historyfile=~/."$_name"/history
-_historyfile_table=~/."$_name"/history_table
-_downloaddir=~/."$_name"/download
+_historyfile=~/"$_name"/history
+_historyfile_table=~/"$_name"/history_table
+_downloaddir=~/"$_name"/download
 _maxsize=300000000
 _pwcmd='curl --silent --connect-timeout 5  --location'
 _localhash="$(sha256sum "$_dir"/"$_name" | cut -d ' ' -f1)"
@@ -330,10 +330,10 @@ show_history_full()
 
     case "$OPTARG" in
         alive)
-            _historylinks="$(awk -F\, '$2 < '"$(date +%s)"'' "$_historyfile")"
+            _historylinks="$(awk -F\, '$3 < '"$(date +%s)"'' "$_historyfile")"
             ;;
         dead)  
-            _historylinks="$(awk -F\, '$2 > '"$(date +%s)"'' "$_historyfile")"
+            _historylinks="$(awk -F\, '$3 > '"$(date +%s)"'' "$_historyfile")"
             ;;
         all)
             _historylinks="$(cat "$_historyfile")"
@@ -349,25 +349,29 @@ show_history_full()
     else
 
         _minus=104
+        _minus="$_columns"
 
         # Table's header
         {
             printf -- "-%.0s" $(seq 1 "$_minus")
             printf "\n"
-            printf "%20s %20s %16s %9s %15s %10s %s\n" \
-                "Link" "|" "Created on" "|" "Expires on" "|" "Lifetime"
+            printf "%20s %19s %16s %7s %16s %7s %s %s %s\n" \
+                "Link" "|" "Created on" "|" "Expires on" "|" "Lifetime" "|" "Filename"
             printf -- "-%.0s" $(seq 1 "$_minus") 
             printf "\n" 
         } > "$_historyfile_table"
-
-        awk 'BEGIN {FS=OFS=",";}
+        
+        #awk -F , '{$2=""; print $0}' OFS=',' "$_historyfile" | \
+        awk 'BEGIN {FS=OFS="|";}
                    {$2 = strftime("%c", $2); $3 = strftime("%c", $3); } 
                    {print}' "$_historyfile" | \
-        awk -F , '{ if ($4 == "1")  $4="1 day"     }1' OFS=',' | \
-        awk -F , '{ if (int($4) > 1 ) $4=$4" days" }1' OFS=',' | \
-        awk -F , '{ if ($4 == "0")  $4="4 hours"   }1' OFS=',' >> "$_historyfile_table"  
+        awk -F '|' '{ if ($4 == "1")    $4="1 day     "  }1' OFS='|' | \
+        awk -F '|' '{ if (int($4) > 1 ) $4=$4" days    " }1' OFS='|' | \
+        awk -F '|' '{ if ($4 == "0")    $4="4 hours   "  }1' OFS='|' >> "$_historyfile_table"
+        #awk -F,  'BEGIN {FS=",";OFS=","} 
+        #                {print $1,substr($2,1,15),$3,$4,$5}' >> "$_historyfile_table"  
        
-        sed -i -e 's/,/ | /g' "$_historyfile_table"
+        sed -i -e 's/|/ | /g' "$_historyfile_table"
         
         printf -- "-%.0s" $(seq 1 "$_minus") >> "$_historyfile_table"
 
@@ -478,41 +482,55 @@ download()
         exit 1
     fi
 
-    printf "Grabbing history from '%s'\n" "$_historyfile"
+    printf "Grabbing history from '%s'\n\n" "$_historyfile"
 
-    _historylinks="$(awk -F\, '$2 < '"$(date +%s)"'' "$_historyfile")"
+    _historylinks="$(awk -F\, '$2 < '"$(date +%s)"'' "$_historyfile" | cut -d ',' -f1)"
+    _historyhash="$(echo "$_historylinks" |  cut -d ',' -f1 | rev | cut -d '/' -f1 | rev)"
 
     if [ -z "$_historylinks" ]; then
         printf "No history found.\n\n"
         exit 0
     fi
-    
-    _historylinks="$(echo "$_historylinks" | cut -d ',' -f1)"
-
-    
+   
     if [ ! -d "$_downloaddir" ]; then
         printf "Creating download folder in %s\n" "$_downloaddir"
 
-        if mkdir -v -p "$_downloaddir" 2>/dev/null; then
+        if ! mkdir -v -p "$_downloaddir"; then
             printf "ERROR: can't create the download folder.\n"
             exit 1
         fi
+
     fi
 
-    printf "Downloading files in: '%s'\n\n" "$_downloaddir"
+    printf "If the file is already in the folder it won't be downloaded.\n\n"
+    printf "There are %s entries in the history, proceed? [y/N]: " "$(wc -l "$_historyfile" | cut -d ' ' -f1)"
+    
+    read -r _choice
 
-    split
+    case "$_choice" in
+        [yY][eE][sS]|[yY])
+            ;;
+        *)
+            printf "Aborting.\n"
+            exit 0;;
+    esac
+
+    printf "\n" ; split
 
     for _link in $_historylinks; do
+        _downloadhash="$(echo $_link | rev | cut -d '/' -f1 | rev)"
         _link=$_pastebin/plain/"$(echo $_link | rev | cut -d '/' -f1 | rev)"
 
-        printf "Downloading -> %s\n" "$_link"
-        
-        curl --progress-bar -# -L --url "$_link" -O --output-dir "$_downloaddir"
-        
+        if [ ! -f "$_downloaddir"/"$_downloadhash" ]; then
+            printf "%${_alignwidth}s : %s\n" "Download" "$_downloadhash"
+            
+            curl --progress-bar -# -L --url "$_link" -O --output-dir "$_downloaddir"
 
-        printf "\n" ; split
+            printf "\n" ; split
+        fi
     done
+
+    printf "Finished! -> %s\n\n" "$_downloaddir"
 
     exit 0
 }
@@ -552,9 +570,10 @@ save_pastebin()
     _history=0
 
     if [ ! -f "$_historyfile" ]; then
-        if mkdir -p ~/."$_name"; then
+        if mkdir -p ~/"$_name"; then
             if touch "$_historyfile"; then
-                printf "History file '%s' created.\n" "$_historyfile"
+                printf "History file '%s' created.\n\n" "$_historyfile"
+                split
             else
                 printf "ERROR: failed to create history file.\n"
                 exit 1
@@ -566,7 +585,7 @@ save_pastebin()
         fi
     fi
     
-    printf "Session saved in: %s\n\n" "$_historyfile"
+    printf "Saving session in: %s\n\n" "$_historyfile"
     split
 }
 
@@ -747,6 +766,7 @@ for _file in "$@"; do
             # Created on
             printf "%${_alignwidth}s : %s\n" "Created on" "$(date)"
 
+
             # Expires on
             if [ "$_expiretime" -eq 0 ]; then
                 printf "%${_alignwidth}s : %s\n" "Expires on" "$(date -u -d "+4 hours" 2>/dev/null || \
@@ -762,6 +782,7 @@ for _file in "$@"; do
                 fi
             fi
             
+
             # Hash print
             printf "%${_alignwidth}s : %s\n" "Hash" "$(echo "$_data" | \
                                                         sed '1p;d' | \
@@ -803,22 +824,26 @@ for _file in "$@"; do
 
                 {
                     # Link
-                    printf "%s," "$(echo "$_data" | sed '1p;d')"
+                    printf "%s|" "$(echo "$_data" | sed '1p;d')"
+
 
                     # Created time in epoch
-                    printf "%s," "$(date --utc '+%s' 2>/dev/null || \
+                    printf "%s|" "$(date --utc '+%s' 2>/dev/null || \
                                     date --utc '+%s')"
 
                     if [ "$_expiretime" -eq 0 ]; then
-                        printf "%s," "$(date --utc '+%s' -d "+4 hours" 2>/dev/null || \
+                        printf "%s|" "$(date --utc '+%s' -d "+4 hours" 2>/dev/null || \
                                         date --utc '+%s' -v "+4H")"
                     else
-                        printf "%s," "$(date --utc '+%s' -d "+${_expiretime} days" 2>/dev/null || \
+                        printf "%s|" "$(date --utc '+%s' -d "+${_expiretime} days" 2>/dev/null || \
                                         date --utc '+%s' -v "+${_expiretime}d")"
                     fi
-
+                    
                     # Time flag
-                    printf "%s\n" "$_expiretime"
+                    printf "%s|" "$_expiretime"
+
+                    # Filename
+                    printf "%s\n" "$(basename "$_file")"
 
                 } >> "$_historyfile" 
             fi
