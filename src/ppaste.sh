@@ -547,9 +547,9 @@ download()
     printf "\n" ; split
 
     for _link in $_historydownload; do
-        _downloadhash="$(echo $_link | cut -d '|' -f1 | rev | cut -d '/' -f1 | rev)"
-        _downloadname="$(echo $_link | rev | cut -d '|' -f1 | rev)"
-        _link=$_pastebin/plain/"$(echo $_link | rev | cut -d '/' -f1 | rev)"
+        _downloadhash="$(echo "$_link" | cut -d '|' -f1 | rev | cut -d '/' -f1 | rev)"
+        _downloadname="$(echo "$_link" | rev | cut -d '|' -f1 | rev)"
+        _link="$_pastebin/plain/$_downloadhash"
 
         if [ ! -f "$_downloaddir"/"$_downloadhash.$_downloadname" ]; then
             printf "%${_alignwidth}s : %s\n" "Downloading" "$_downloadhash.$_downloadname"
