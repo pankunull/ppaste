@@ -524,7 +524,7 @@ download()
     if [ ! -d "$_downloaddir" ]; then
         printf "Creating download folder in %s\n\n" "$_downloaddir"
 
-        if ! mkdir -v -p "$_downloaddir" &>/dev/null; then
+        if ! mkdir -v -p "$_downloaddir" 2>&1; then
             printf "ERROR: can't create the download folder.\n"
             exit 1
         fi
