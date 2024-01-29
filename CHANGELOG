@@ -1,6 +1,7 @@
 Changelog 0.4.48:
     - reworked the whole 'show_history_full()' function
     - replaced while command to awk (+10x quicker)
+    - fixed warnings
 
 Changelog 0.4.47:
     - removed support for text

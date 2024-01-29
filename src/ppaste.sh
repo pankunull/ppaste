@@ -357,12 +357,14 @@ show_history_full()
         _minus=104
 
         # Table's header
-        printf -- "-%.0s" $(seq 1 "$_minus") > "$_historyfile_table"
-        printf "\n"  >> "$_historyfile_table"
-        printf "%20s %20s %16s %9s %15s %10s %s\n" \
-            "Link" "|" "Created on" "|" "Expires on" "|" "Lifetime" >> "$_historyfile_table"
-        printf -- "-%.0s" $(seq 1 "$_minus") >> "$_historyfile_table"
-        printf "\n" >> "$_historyfile_table"
+        {
+            printf -- "-%.0s" $(seq 1 "$_minus")
+            printf "\n"
+            printf "%20s %20s %16s %9s %15s %10s %s\n" \
+                "Link" "|" "Created on" "|" "Expires on" "|" "Lifetime"
+            printf -- "-%.0s" $(seq 1 "$_minus") 
+            printf "\n" 
+        } >> "$_historyfile_table"
 
         awk 'BEGIN {FS=OFS=",";}
                    {$2 = strftime("%c", $2); $3 = strftime("%c", $3); } 
@@ -776,7 +778,7 @@ for _file in "$@"; do
                                         date --utc '+%s' -v "+4H")"
                     else
                         printf "%s," "$(date --utc '+%s' -d "+${_expiretime} days" 2>/dev/null || \
-                                        date --utc '+%s' -v "+${_expiretime/}d")"
+                                        date --utc '+%s' -v "+${_expiretime}d")"
                     fi
 
                     # Time flag
