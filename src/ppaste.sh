@@ -86,7 +86,7 @@ show_usage()
     printf "History:                                                              \n"
     printf "  -s                  : Save session in history                     \n\n"
     
-    printf "Lifetime                                                              \n"
+    printf "Lifetime:                                                             \n"
     printf "  -e  <1-7>           : Expiration date in days                       \n"
     printf "                        If this options is omitted the default        \n"
     printf "                        parameter is 4 hours.                       \n\n"
