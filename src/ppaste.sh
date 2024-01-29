@@ -17,22 +17,29 @@ _version=0.4.53
 _source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
 _sha256='https://raw.githubusercontent.com/pankunull/ppaste/main/sign/sha256sum.txt'
 _pastebin="https://www.oetec.com/pastebin"
+
 _width=120
 _columns="$(stty size | cut -d ' ' -f2)"
+_alignwidth=-15
+
+_maxsize=300000000
+_pwcmd='curl --silent --connect-timeout 5  --location'
+
 _expiretime=0
 _verbose=0
 _verbosemode='None'
 _links=""
 _history=1
+
 _name="$(basename "$0")"
 _dir="$(dirname "$0")"
+
 _historyfile=~/"$_name"/history
 _historyfile_table=~/"$_name"/history_table
 _downloaddir=~/"$_name"/download
-_maxsize=300000000
-_pwcmd='curl --silent --connect-timeout 5  --location'
+
 _localhash="$(sha256sum "$_dir"/"$_name" | cut -d ' ' -f1)"
-_alignwidth=-15
+
 
 
 
