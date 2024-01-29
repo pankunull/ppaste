@@ -13,7 +13,7 @@
 
 # global variables
 
-_version=0.4.50
+_version=0.4.51
 _source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
 _sha256='https://raw.githubusercontent.com/pankunull/ppaste/main/sign/sha256sum.txt'
 _width=120
@@ -84,7 +84,8 @@ show_usage()
     printf "  -m                  : Normal                                      \n\n"
 
     printf "History:                                                              \n"
-    printf "  -s                  : Save session in history                     \n\n"
+    printf "  -s                  : Save session in history                       \n"
+    printf "  -r                  : Delete history                              \n\n"   
     
     printf "Lifetime:                                                             \n"
     printf "  -e  <1-7>           : Expiration date in days                       \n"
@@ -99,14 +100,10 @@ show_usage()
 
     printf "  -D                  : Download alive links                        \n\n"
 
-    printf "Upgrade:                                                              \n"
+    printf "Miscellaneous:                                                        \n"
     printf "  -u                  : Upgrade                                       \n"
-    printf "  -U                  : Force upgrade                               \n\n"
-
-    printf "Help:                                                                 \n"
-    printf "  -h                  : Show this help                              \n\n"
-
-    printf "Version:                                                              \n"
+    printf "  -U                  : Force upgrade                                 \n"
+    printf "  -h                  : Show this help                                \n"
     printf "  -v                  : Show version                                \n\n"
    
     printf "Examples:                                                             \n"
@@ -387,6 +384,36 @@ show_history_full()
 
 
 
+# delete_history
+#     Delete history
+delete_history()
+{
+    if [ ! -f "$_historyfile" ]; then
+        printf "No history file found.\n\n"
+        exit 0
+    fi
+
+    printf "Are you sure you want to delete the history? [y/N]: "
+    
+    read -r _choice
+
+    case "$_choice" in
+        [yY][eE][sS]|[yY])
+            ;;
+        *)
+            printf "Aborting.\n"
+            exit 0;;
+    esac
+
+    rm -v "$_historyfile"
+    #rm -v "$_historyfile_table"
+    
+    exit 0
+}
+
+
+
+
 # check_lifetime
 #     Display expiration time
 check_lifetime()
@@ -550,7 +577,7 @@ save_pastebin()
 
 # Process arguments
 #
-while getopts 'hvuU:l:L:c:o:Dfpdme:s' _option; do
+while getopts 'hvruU:l:L:c:o:Dfpdme:s' _option; do
     case "$_option" in
         h) 
             show_usage
@@ -573,7 +600,9 @@ while getopts 'hvuU:l:L:c:o:Dfpdme:s' _option; do
         L)
             show_history_full
             ;;
-
+        r)
+            delete_history
+            ;;
         c)
             check_lifetime
             ;;
