@@ -1,5 +1,6 @@
 Changelog 0.4.51:
     - added 'delete_history' function
+    - fixed 'download' function
 
 Changelog 0.4.50:
     - simplified version check

@@ -16,6 +16,7 @@
 _version=0.4.51
 _source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
 _sha256='https://raw.githubusercontent.com/pankunull/ppaste/main/sign/sha256sum.txt'
+_pastebin="https://www.oetec.com/pastebin"
 _width=120
 _columns="$(stty size | cut -d ' ' -f2)"
 _expiretime=0
@@ -503,9 +504,12 @@ download()
     split
 
     for _link in $_historylinks; do
-        printf "Downloading -> %s\n" "$_link"
+        _link=$_pastebin/plain/"$(echo $_link | rev | cut -d '/' -f1 | rev)"
 
-        curl --progress-bar -4 --connect-timeout 5 -L --url "$_link" -O --output-dir "$_downloaddir"
+        printf "Downloading -> %s\n" "$_link"
+        
+        curl --progress-bar -# -L --url "$_link" -O --output-dir "$_downloaddir"
+        
 
         printf "\n" ; split
     done
