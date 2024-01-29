@@ -162,7 +162,8 @@ upgrade()
 
 
     # Check version 
-    if [ "$_sourceversion" == "$_version" ]; then
+    if [ "$(echo "$_version" | tr -d '.')" -eq \
+         "$(echo "$_sourceversion" | tr -d '.')" ]; then
         printf "Up-to-date\n\n"
         
         if [ "$_sourcehash" != "$_localhash" ]; then
