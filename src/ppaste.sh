@@ -14,7 +14,7 @@
 
 # global variables
 
-_version=0.4.45
+_version=0.4.48
 #_source='https://www.genunix.com/panku/pankupaste/ppaste.sh'
 #_sha256='https://www.genunix.com/panku/pankupaste/sha256sum.txt'
 _source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
@@ -29,8 +29,8 @@ _history=1
 _name="$(basename "$0")"
 _dir="$(dirname "$0")"
 _historyfile=~/."$_name"/history
+_historyfile_table=~/."$_name"/history_table
 _downloaddir=~/."$_name"/download
-_textflag=1
 _maxsize=300000000
 _pwcmd='curl --silent --connect-timeout 5  --location'
 _localhash="$(sha256sum "$_dir"/"$_name" | cut -d ' ' -f1)"
@@ -56,7 +56,6 @@ else
 fi
 
 
-
 # horizontal split
 split()
 {
@@ -79,50 +78,43 @@ printf "%s\n\n" "$(split)"
 #     Display usage information for this utility.
 show_usage() 
 {
-    printf "Usage: %s [OUTPUT] [HISTORY] <file1> <file...> or [TEXT] <text> \n\n" "$_name"
+    printf "Usage: %s [OUTPUT] [HISTORY] [LIFETIME] <file1> <file...>\n\n" "$_name"
 
-    printf "OUTPUT                                                               \n"
-    printf "  -f                  :Full mode (show html and plain links)         \n"
-    printf "  -p                  :Plain mode (show plain links)                 \n"
-    printf "  -d                  :Lined mode (show lined links)                 \n"
-    printf "  -m                  :HTML mode (show html links)                 \n\n"
+    printf "Output:                                                               \n"
+    printf "  -f                  : All (normal, lined, plain)                    \n"
+    printf "  -p                  : Plain                                         \n"
+    printf "  -d                  : Lined                                         \n"
+    printf "  -m                  : Normal                                      \n\n"
 
-    printf "  -e  <1-7>           :Expiration date in days                       \n"
-    printf "                          If this options is omitted the default     \n"
-    printf "                          parameter is 4 hours.                    \n\n"
+    printf "History:                                                              \n"
+    printf "  -s                  : Save session in history                     \n\n"
+    
+    printf "Lifetime                                                              \n"
+    printf "  -e  <1-7>           : Expiration date in days                       \n"
+    printf "                        If this options is omitted the default        \n"
+    printf "                        parameter is 4 hours.                       \n\n"
 
-    printf "HISTORY                                                              \n"
-    printf "  -s                  :Save session in history                     \n\n"
+    printf "Utilities:                                                            \n" 
+    printf "  -l <format>         : Show history (alive, dead, full)              \n"
+    printf "  -L <format>         : Show formatted history (alive ,dead, full)    \n"
 
-    printf "TEXT                                                                 \n"
-    printf "  -t  \"text\"          :Paste text (in double quotes)               \n"
-    printf "                          This function doesn't work with files or   \n"
-    printf "                          multiple entries                           \n"
+    printf "  -c <url>            : Check expiration date                         \n"
 
-    printf "UTILITIES                                                            \n" 
-    printf "  -l <format>         :Show links saved in history                   \n"
-    printf "                          Formats: alive, dead, all                  \n"
-    printf "  -L <format>         :Show table history with dates                 \n"
-    printf "                          Formats: alive, dead, all                \n\n"
+    printf "  -D                  : Download alive links                        \n\n"
 
-    printf "  -c  <url>           :Check expiration date                         \n"
+    printf "Upgrade:                                                              \n"
+    printf "  -u                  : Upgrade                                       \n"
+    printf "  -U                  : Force upgrade                               \n\n"
 
-    printf "  -D                  :Download alive links                        \n\n"
+    printf "Help:                                                                 \n"
+    printf "  -h                  : Show this help                              \n\n"
 
-    printf "UPGRADE                                                              \n"
-    printf "  -u                  :Upgrade                                       \n"
-    printf "  -U                  :Force upgrade                               \n\n"
-
-    printf "HELP                                                                 \n"
-    printf "  -h                  :Show this help                              \n\n"
-
-    printf "VERSION                                                              \n"
-    printf "  -v                  :Show version                                \n\n"
+    printf "Version:                                                              \n"
+    printf "  -v                  : Show version                                \n\n"
    
-    printf "EXAMPLES                                                             \n"
+    printf "Examples:                                                             \n"
     printf " %s <file1> <file2>\n" "$_name"
-    printf " %s -p -s -e 3 <file1> <file2>\n" "$_name"
-    printf " %s -d -e 7 -t \"text\"\n" "$_name"
+    printf " %s -p -e 3 -s <file1> <file2>\n" "$_name"
     printf " %s -l alive\n\n" "$_name"
 
     exit 0
@@ -361,44 +353,31 @@ show_history_full()
     if [ -z "$_historylinks" ]; then
         printf "No history found.\n\n"
     else
-        split
 
-        _minus=120
+        _minus=104
 
         # Table's header
-        printf -- "-%.0s" $(seq 1 "$_minus") ; printf "\n"
-        printf "%25s %21s %18s %11s %18s %11s %s\n" "Link" "|" "Created on" "|" "Expires on" "|" "Lifetime"
-        printf -- "-%.0s" $(seq 1 "$_minus") ; printf "\n"
+        printf -- "-%.0s" $(seq 1 "$_minus") > "$_historyfile_table"
+        printf "\n"  >> "$_historyfile_table"
+        printf "%20s %20s %16s %9s %15s %10s %s\n" \
+            "Link" "|" "Created on" "|" "Expires on" "|" "Lifetime" >> "$_historyfile_table"
+        printf -- "-%.0s" $(seq 1 "$_minus") >> "$_historyfile_table"
+        printf "\n" >> "$_historyfile_table"
 
-
-        # Reading LINE from history file
-        while read -r _LINE; do
-            _LLINK="$(echo "$_LINE" | cut -d ',' -f1)"
-            _LFLAG=$(echo "$_LINE" | cut -d ',' -f4)
-
-            _LCREATED="$(date -d @"$(echo "$_LINE" | cut -d ',' -f2)" 2>/dev/null || \
-                         dare -r "$(echo "$_LINE" | cut -d ',' -f2)" )"
-            
-            # Expiration time output
-            _LEXPIRE="$(date -d @"$(echo "$_LINE" | cut -d ',' -f3)" 2>/dev/null || \
-                        dare -r "$(echo "$_LINE" | cut -d ',' -f3)" )"
-            
-            _LIFETIME="$(echo "$_LINE" | cut -d ',' -f4)"
-   
-            # Adjust lifetime output
-            if [ "$_LFLAG" -eq "0" ]; then
-                _LIFETIME="4 hours"
-            elif [ "$_LIFETIME" = "1" ]; then
-                _LIFETIME="1 day"
-            else
-                _LIFETIME="$_LIFETIME days"
-            fi
-            
-            # Print columns
-            printf "%s | %s | %s | %s\n" "$_LLINK" "$_LCREATED" "$_LEXPIRE" "$_LIFETIME"
-        done < "$_historyfile"
+        awk 'BEGIN {FS=OFS=",";}
+                   {$2 = strftime("%c", $2); $3 = strftime("%c", $3); } 
+                   {print}' "$_historyfile" | \
+        awk -F , '{ if ($4 == "1")  $4="1 day"     }1' OFS=',' | \
+        awk -F , '{ if (int($4) > 1 ) $4=$4" days" }1' OFS=',' | \
+        awk -F , '{ if ($4 == "0")  $4="4 hours"   }1' OFS=',' >> "$_historyfile_table"  
+       
+        sed -i -e 's/,/ | /g' "$_historyfile_table"
         
-        printf -- "-%.0s" $(seq 1 "$_minus") ; printf "\n"
+        printf -- "-%.0s" $(seq 1 "$_minus") >> "$_historyfile_table"
+
+        printf "\n" >> "$_historyfile_table"
+
+        cat "$_historyfile_table"
         
     fi
     
@@ -566,7 +545,7 @@ save_pastebin()
 
 # Process arguments
 #
-while getopts 'hvuUt:l:L:c:o:Dfpdme:s' _option; do
+while getopts 'hvuU:l:L:c:o:Dfpdme:s' _option; do
     case "$_option" in
         h) 
             show_usage
@@ -581,11 +560,6 @@ while getopts 'hvuUt:l:L:c:o:Dfpdme:s' _option; do
             ;;
         U)
             force_upgrade
-            ;;
-
-        t)
-            _textpaste="$OPTARG"
-            _textflag=0
             ;;
 
         l)
@@ -643,7 +617,6 @@ done
 # Shift arguments when getopt is done
 shift $((OPTIND-1))
 
-
 # Check if there are no OPTIONS or ARGUMENTS
 if [ $OPTIND -eq 1 ] && [ $# -eq 0 ]; then 
     printf "%s: try '-h' option for more information.\n\n" "$(basename "$0")"
@@ -652,17 +625,10 @@ fi
 
 
 # Check if no ARGUMENTS are passed when OPTIONS are given
-if [ "$_textflag" -eq 1 ]; then
-    if [ $OPTIND -gt 1 ] && [ $# -eq 0 ]; then
-        printf "ERROR: no file given.\n"
-        exit 1
-    else
-        _args="$*"
-    fi
-else
-    _args="$_textpaste"
+if [ $OPTIND -gt 1 ] && [ $# -eq 0 ]; then
+    printf "ERROR: no file given.\n"
+    exit 1
 fi
-
 
 
 
@@ -670,34 +636,29 @@ fi
 
 
 
-
 # Looping through files
-for _file in $_args; do
+for _file in "$@"; do
     # Check if:
     # - file exist
     # - is not empty
     # - is not larger than 3000000000 (300MB)
 
     # File checking
-    if [ -n "$_textpaste" ]; then
-        _content="paste=$_textpaste"
-    else
-        if [ -f "$_file" ]; then
-            if [ -s "$_file" ]; then
-                if [ "$(wc -c < "$_file")" -gt "$_maxsize" ]; then
-                    printf  "ERROR: %s is exceeding 300MB.\n\n" "$(basename "$_file")"
-                    split
-                else
-                    _content="pastefile=@$_file"
-                fi
-            else
-                printf "ERROR: %s is empty.\n\n" "$_file"
+    if [ -f "$_file" ]; then
+        if [ -s "$_file" ]; then
+            if [ "$(wc -c < "$_file")" -gt "$_maxsize" ]; then
+                printf  "ERROR: %s is exceeding 300MB.\n\n" "$(basename "$_file")"
                 split
-            fi    
+            else
+                _content=pastefile=@"$_file"
+            fi
         else
-            printf "ERROR: '%s' is not a valid file.\n\n" "$_file"
+            printf "ERROR: %s is empty.\n\n" "$_file"
             split
-        fi
+        fi    
+    else
+        printf "ERROR: '%s' is not a valid file.\n\n" "$_file"
+        split
     fi
 
             
@@ -705,12 +666,8 @@ for _file in $_args; do
     # Content parsing
     if [ -n "$_content" ]; then
         
-        # Filename or text
-        if [ "$_textflag" -eq 0 ]; then
-            printf "%${_alignwidth}s : %s\n" "Sending" "$_textpaste"    
-        else
-            printf "%${_alignwidth}s : %s\n" "Sending" "$(basename "$_file")"
-        fi
+        # Filename
+        printf "%${_alignwidth}s : %s\n" "Sending" "$(basename "$_file")"
         
         # Curl the file
         if _data="$(COLUMNS=63 curl                                \
@@ -724,7 +681,6 @@ for _file in $_args; do
                    https://www.oetec.com/post                      \
                    )"; then
 
-        # I replaced the '#' progress bar with curl's default
 
         # Curl the file
         #if _data="$(curl                                           \
@@ -809,7 +765,7 @@ for _file in $_args; do
 
                 {
                     # Link
-                    printf "%s," "$(echo "$_data" | sed '3p;d')"
+                    printf "%s," "$(echo "$_data" | sed '1p;d')"
 
                     # Created time in epoch
                     printf "%s," "$(date --utc '+%s' 2>/dev/null || \
@@ -839,11 +795,7 @@ for _file in $_args; do
 
 
     _content=''
-        
 
-    if [ -n "$_textpaste" ]; then
-        break
-    fi
 done
 
 

@@ -1,3 +1,11 @@
+Changelog 0.4.48:
+    - reworked the whole 'show_history_full()' function
+    - replaced while command to awk (+10x quicker)
+
+Changelog 0.4.47:
+    - removed support for text
+    - cleaned code
+
 Changelog 0.4.46:
     - removed '--max-time' option
     - improved output format when sending file/text
