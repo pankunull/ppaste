@@ -364,7 +364,7 @@ show_history_full()
                 "Link" "|" "Created on" "|" "Expires on" "|" "Lifetime"
             printf -- "-%.0s" $(seq 1 "$_minus") 
             printf "\n" 
-        } >> "$_historyfile_table"
+        } > "$_historyfile_table"
 
         awk 'BEGIN {FS=OFS=",";}
                    {$2 = strftime("%c", $2); $3 = strftime("%c", $3); } 
