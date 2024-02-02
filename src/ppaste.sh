@@ -441,7 +441,7 @@ check_link()
                            date -j -f '%a%b%d%H%M%S%Z%Y' "$(echo "$server_create_date" | tr -d ' :')" +%s)"
 
     server_epoch_expire="$(date --date "$server_expire_date" +%s 2>/dev/null || \
-                           date -j -f '%a%b%d%H%M%S%Z%Y' "$(echo "$server_create_date" | tr -d ' :')" +%s)"
+                           date -j -f '%a%b%d%H%M%S%Z%Y' "$(echo "$server_expire_date" | tr -d ' :')" +%s)"
 
     local_create_date="$(date --date @"$server_epoch_create" 2>/dev/null || \
                          date -r "$server_epoch_expire")"
