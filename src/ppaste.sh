@@ -712,7 +712,8 @@ file_upload()
     ### Payload's informations
     ### Time
     epoch_create_time="$(date '+%s')"
-    date_create_time="$(date --date @"$epoch_create_time")"
+    date_create_time="$(date --date @"$epoch_create_time" 2>/dev/null || \
+                        date -r "$epoch_create_time")"
     
 
     ### Create epoch and date
