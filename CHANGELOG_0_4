@@ -1,0 +1,64 @@
+Changelog 0.4.53:
+    - added 'delete_download' function
+
+Changelog 0.4.52:
+    - improved 'download' function
+    - added file name in the history file
+    - reworked 'show_history_full'
+    - changed ppaste directory from ~/.ppaste to ~/ppaste
+
+Changelog 0.4.51:
+    - added 'delete_history' function
+    - fixed 'download' function
+
+Changelog 0.4.50:
+    - simplified version check
+    - removed sha256sum.txt
+
+Changelog 0.4.49:
+    - change split from ':' to '-'
+    - added more informations to function 'check_lifetime'
+
+Changelog 0.4.48:
+    - reworked the whole 'show_history_full()' function
+    - replaced while command to awk (+10x quicker)
+    - fixed warnings
+
+Changelog 0.4.47:
+    - removed support for text
+    - cleaned code
+
+Changelog 0.4.46:
+    - removed '--max-time' option
+    - improved output format when sending file/text
+    - fixed error in show history (alive/dead links)
+    - fixed error where expired date wasn't correctly converted from epoch
+
+Changelog 0.4.45:
+    - cleaned the code
+    - added posix tag
+    - added space after banner
+
+Changelog 0.4.44:
+    - fixed an issue where links would not appear after
+      the progress bar if one of the output flag was used 
+    - improved output for links at the end
+
+Changelog 0.4.43:
+   - using sha256sum instead of openssl command
+   - fixed all warning using "https://www.shellcheck.net/"
+
+Changelog 0.4.42:
+   - moved host to Github 
+
+Changelog 0.4.41:
+   - added hash check
+   - added 'force upgrade' function
+   - changed banner
+   - added download function for alive links
+   - new help menu
+   - added 'show_history_full' function with table format
+
+Changelog 0.4.40:
+   - fixed bug in check_lifetime
+
