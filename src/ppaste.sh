@@ -811,7 +811,7 @@ for _file in "$@"; do
             if [ "$_expiretime" -eq 0 ]; then
                 printf "%${_alignwidth}s : %s\n" "Expires on" "$(date -d "+4 hours" 2>/dev/null || \
                                                                  date -v "+4H")" 
-                printf "%${_alignwidth}s : %s\n" "Expires on" "4 hours"
+                printf "%${_alignwidth}s : %s\n" "Lifetime" "4 hours"
             else
                 printf "%${_alignwidth}s : %s\n" "Expires on" "$(date -d "+${_expiretime} days" 2>/dev/null || \
                                                                  date -v "+${_expiretime}d")"
