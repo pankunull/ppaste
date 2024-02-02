@@ -438,10 +438,10 @@ check_link()
     server_expire_date="$(echo "$headers" | grep "Expires: " | cut -d ' ' -f2-)"
 
     server_epoch_create="$(date --date "$server_create_date" +%s 2>/dev/null || \
-                           date -j -f '%a%d%Y%b%H%M%S%Z' "$(echo "$server_create_date" | tr -d ' ,:')" +%s)"
+                           date -j -f '%a%d%b%Y%H%M%S%Z' "$(echo "$server_create_date" | tr -d ' ,:')" +%s)"
 
     server_epoch_expire="$(date --date "$server_expire_date" +%s 2>/dev/null || \
-                           date -j -f '%a%d%Y%b%H%M%S%Z' "$(echo "$server_expire_date" | tr -d ' ,:')" +%s)"
+                           date -j -f '%a%d%b%Y%H%M%S%Z' "$(echo "$server_expire_date" | tr -d ' ,:')" +%s)"
 
     local_create_date="$(date --date @"$server_epoch_create" 2>/dev/null || \
                          date -r "$server_epoch_expire")"
