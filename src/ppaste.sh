@@ -14,7 +14,7 @@
 # Variables
 ###############################################################
 
-version="0.5.00"
+version="0.5.10"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
