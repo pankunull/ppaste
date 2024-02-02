@@ -183,8 +183,7 @@ show_history_table()
         exit 0
     fi
 
-    minus=104
-    minus="$columns"
+    minus=128
 
     # Table's header
     {
@@ -266,7 +265,7 @@ download()
             download_hash="$(echo "$link" | cut -d '|' -f1 | rev | cut -d '/' -f1 | rev)"
             download_link="$pastebin"/plain/"$download_hash"
 
-        elif [ "${#link}" = '9' ]; then
+        elif [ "${#link}" = '8' ]; then
             download_hash="$link"
             download_link="$pastebin"/plain/"$link"
 
@@ -275,7 +274,7 @@ download()
         fi
         
 
-        if ! headers="$($pwcmd -I "$download_link")"; then
+        if ! headers="$($pwcmd -I --url "$download_link")"; then
             error  "curl error" 1
         fi
             
@@ -403,18 +402,34 @@ delete_download()
 
 check_link()
 {
-    # Grab headers from the link
-    if ! headers="$($pwcmd -I "$1")"; then
-        error "curl failed" 1
+    link="$1"
+
+    ### Check if the link is valid using grep
+    ### If the header contains the expiration date it's a valid link
+    if echo "$link" | grep -q "$pastebin"; then
+        download_hash="$(echo "$link" | cut -d '|' -f1 | rev | cut -d '/' -f1 | rev)"
+        download_link="$pastebin"/plain/"$download_hash"
+
+    elif [ "${#link}" = '8' ]; then
+        download_hash="$link"
+        download_link="$pastebin"/plain/"$link"
+
+    else
+        error "not a valid link or hash" 1
+    fi
+    
+
+    if ! headers="$($pwcmd -I --url "$download_link")"; then
+        error  "curl error" 1
+    fi
+        
+    if ! echo "$headers" | grep --silent -q -v 'Expires'; then
+        error "paste not found on the server" 1
     fi
 
-    # Check if the link is valid 
-    # and the headers contain the expiration time
-    if ! echo "$headers" | grep "Expires: " 1>/dev/null; then
-        error  "not a valid link or hash" 1
-    fi
+    #download_name="$(echo "$headers" | grep filename | cut -d '=' -f2 | tr -d '"\r')"
 
-    server_hash="$(echo "$1" | rev | cut -d '/' -f1 | rev)"
+    server_hash="$(echo "$link" | rev | cut -d '/' -f1 | rev)"
     server_type="$(echo "$headers" | grep "Type: " | cut -d ' ' -f2-)"
 
     headers="$(echo "$headers" | tr -d '\r')"

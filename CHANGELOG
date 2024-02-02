@@ -1,3 +1,7 @@
+Changelog 0.5.11:
+    - fixed 'check_link'
+    - fixed 'date -r'
+
 Changelog 0.5.00:
     - complete code rework
     - added long option argument
