@@ -471,7 +471,8 @@ upgrade()
     ### Grab version
     server_version="$(echo "$server_version" |\
                       grep -m 1 "version" |\
-                      cut -d '=' -f2 )"
+                      cut -d '=' -f2 |\
+                      tr -d '"')"
 
 
     ### Check if the new version has been grabbed
@@ -488,7 +489,7 @@ upgrade()
 
 
     ### Check version
-    if [ "$(echo "$version" | tr -d '.')" -eq \
+    if [ "$(echo "$version" | tr -d '.')" = \
          "$(echo "$server_version" | tr -d '.')" ]; then
         printf "Up-to-date\n\n"
 
