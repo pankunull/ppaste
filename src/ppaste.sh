@@ -515,7 +515,7 @@ upgrade()
     esac
 
 
-    ### Upgrade
+    ## Upgrade
     if ! $pwcmd --url "$github_source" \
                  --output /tmp/"$script_name".new; then
         error "curl failed"
@@ -639,9 +639,9 @@ help_page()
 
 
     printf "\nExamples:\n"
-    printf " %s -f file1.txt file2.txt\n" "$script_name"
-    printf " %s --save-session -e 1 --files file1.txt file2.txt\n" "$script_name"
-    printf " %s --f file1.txt -e 1 -s -f file2.txt\n" "$script_name"
+    printf " %s file1.txt file2.txt\n" "$script_name"
+    printf " %s --save-session -e 1 file1.txt file2.txt\n" "$script_name"
+    printf " %s file1.txt -e 1 -s file2.txt\n" "$script_name"
     printf "\n"
 
     exit 0
