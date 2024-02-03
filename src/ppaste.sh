@@ -14,7 +14,7 @@
 # Variables
 ###############################################################
 
-version="0.5.13"
+version="0.5.14"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
@@ -423,7 +423,7 @@ check_link()
     fi
         
     if ! echo "$headers" | grep 'Expires'; then
-        error "paste not found on the server" 1
+        error "paste not valid or expired" 1
     fi
 
     #download_name="$(echo "$headers" | grep filename | cut -d '=' -f2 | tr -d '"\r')"
@@ -737,8 +737,8 @@ file_upload()
     ### Create epoch and date
     #### Calculating the time using an offset it's easier for POSIX compatibility
     if [ "$lifetime" -eq 0 ]; then
-        epoch_expire_offset="$(( epoch_create_time + 14000 ))"
-        date_expire_time="$(date --date @"$epoch_expire_offset" 2>/dev/null || \
+        epoch_expire_time="$(( epoch_create_time + 14000 ))"
+        date_expire_time="$(date --date @"$epoch_expire_time" 2>/dev/null || \
                             date -r "$epoch_expire_offset")"
     else
         epoch_expire_offset="$(( lifetime * 86400 ))"

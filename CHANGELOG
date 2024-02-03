@@ -1,3 +1,6 @@
+Changelog 0.5.14
+    - fixed bug where 'epoch_expire_time' was wrong
+
 Changelog 0.5.13
     - added error code check for curl
 
