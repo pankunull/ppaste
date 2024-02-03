@@ -40,7 +40,6 @@ file_flag=0
 file_max_size=300000000
 
 width=13
-columns="$(stty size | cut -d ' ' -f2)"
 help_width=30
 
 
@@ -423,7 +422,7 @@ check_link()
         error  "curl error" 1
     fi
         
-    if ! echo "$headers" | grep --silent -q -v 'Expires'; then
+    if ! echo "$headers" | grep 'Expires'; then
         error "paste not found on the server" 1
     fi
 
