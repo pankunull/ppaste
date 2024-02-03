@@ -476,7 +476,7 @@ upgrade()
 {
     ### Check if source is reachable
     if ! server_version="$($pwcmd --url "$github_source")"; then
-        error "curl failed." 1
+        error "curl failed" 1
     fi
 
 
@@ -489,7 +489,7 @@ upgrade()
 
     ### Check if the new version has been grabbed
     if [ -z "$server_version" ]; then
-        error "can't fetch version." 1
+        error "can't fetch version" 1
     fi
     
 
@@ -564,7 +564,7 @@ force_upgrade()
 {
     ### Check if source is reachable
     if ! server_version="$($pwcmd --url "$github_source")"; then
-        error "curl failed." 1
+        error "curl failed" 1
     fi
 
 
@@ -707,8 +707,14 @@ file_upload()
                 --form post=pastebin \
                 --form days="$lifetime" \
                 --form "$file_to_upload" \
-                https://www.oetec.com/post)"
-    
+                https://www.oetec.com/post 2>/dev/null)"
+ 
+
+    ### Error code 
+    if [ "$?" -gt 0 ]; then
+        error "curl failed" 1
+    fi
+
     ### 404
     if echo "$payload" | grep "404" 1>/dev/null; then
         error "404 - page not found" 1
