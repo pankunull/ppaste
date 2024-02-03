@@ -707,7 +707,7 @@ file_upload()
                 --form post=pastebin \
                 --form days="$lifetime" \
                 --form "$file_to_upload" \
-                https://www.oetec.com/post 2>/dev/null)"
+                https://www.oetec.com/post)"
  
 
     ### Error code 
