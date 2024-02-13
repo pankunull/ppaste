@@ -14,7 +14,7 @@
 # Variables
 ###############################################################
 
-version="0.5.14"
+version="0.5.15"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
@@ -134,8 +134,8 @@ show_history()
     printf "Grabbing history from '%s'\n\n" "$history_file"
         
     case "$1" in
-        alive) history_links="$(awk -F\, '$3 < '"$(date +%s)"'' "$history_file")" ;;
-         dead) history_links="$(awk -F\, '$3 > '"$(date +%s)"'' "$history_file")" ;;
+        alive) history_links="$(awk -F\| '$3 > '"$(date +%s)"'' "$history_file")" ;;
+         dead) history_links="$(awk -F\| '$3 < '"$(date +%s)"'' "$history_file")" ;;
           all) history_links="$(cat "$history_file")" ;;
         *)
             error "bad argument"
@@ -168,8 +168,8 @@ show_history_table()
     printf "Grabbing history from '%s'\n\n" "$history_file"
 
     case "$1" in
-        alive) history_links="$(awk -F\, '$3 < '"$(date +%s)"'' "$history_file")" ;;
-         dead) history_links="$(awk -F\, '$3 > '"$(date +%s)"'' "$history_file")" ;;
+        alive) history_links="$(awk -F\| '$3 > '"$(date +%s)"'' "$history_file")" ;;
+         dead) history_links="$(awk -F\| '$3 < '"$(date +%s)"'' "$history_file")" ;;
           all) history_links="$(cat "$history_file")" ;;
         *)
             error "bad argument"
@@ -194,9 +194,11 @@ show_history_table()
         printf "\n"
     } > "$history_file_table"
 
+    echo "$history_links" | \
+
     awk 'BEGIN {FS=OFS="|";}
                {$2 = strftime("%c %Z", $2); $3 = strftime("%c %Z", $3); } 
-               {print}' "$history_file" | \
+               {print}' | \
     awk -F '|' '{ if ($4 == "1")    $4="1 day     "  }1' OFS='|' | \
     awk -F '|' '{ if (int($4) > 1 ) $4=$4" days    " }1' OFS='|' | \
     awk -F '|' '{ if ($4 == "0")    $4="4 hours   "  }1' OFS='|' >> "$history_file_table"
@@ -313,7 +315,7 @@ download_alive()
 
     printf "Grabbing history from '%s'\n\n" "$history_file"
 
-    history_download="$(awk -F\, '$2 < '"$(date +%s)"'' "$history_file")"
+    history_download="$(awk -F\| '$3 > '"$(date +%s)"'' "$history_file")"
 
     if [ -z "$history_download" ]; then
         printf "No history found\n\n"
@@ -329,8 +331,10 @@ download_alive()
     
     fi
 
+    download_number="$(echo "$history_download" | wc -l)"
+
     printf "If the file is already in the folder it won't be downloaded.\n\n"
-    printf "There are %s entries in the history, continue? [y/N]: " "$(wc -l "$history_file" | cut -d ' ' -f1)"
+    printf "There are %s alive paste in the history, continue? [y/N]: " "$download_number"
 
     read -r choice
 
@@ -348,7 +352,7 @@ download_alive()
     for link in $history_download; do
         download_hash="$(echo "$link" | cut -d '|' -f1 | rev | cut -d '/' -f1 | rev)"
         download_name="$(echo "$link" | rev | cut -d '|' -f1 | rev)"
-        link="$pastebin/plain/$download_hash"
+        download_link="$pastebin/plain/$download_hash"
 
         if [ ! -f "$download_dir"/"$download_name" ]; then
             printf "%${width}s : %s\n" "Downloading" "$download_name"
@@ -925,6 +929,10 @@ while [ $# -gt 0 ]; do
         -D|--download-alive)
                 shift 1
                 download_alive 
+                ;;
+        -R|--delete_download)
+                shift 1
+                delete_download
                 ;;
         # Utilities
         -c|--check)

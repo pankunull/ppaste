@@ -1,3 +1,8 @@
+Changelog 0.5.15
+    - fixed table history not showing alive or dead
+    - fixed 'download_alive' function
+    - fixes 'delete_download' function
+
 Changelog 0.5.14
     - fixed bug where 'epoch_expire_time' was wrong
 
