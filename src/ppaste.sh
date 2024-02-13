@@ -930,7 +930,7 @@ while [ $# -gt 0 ]; do
                 shift 1
                 download_alive 
                 ;;
-        -R|--delete_download)
+        -R|--delete-download)
                 shift 1
                 delete_download
                 ;;
