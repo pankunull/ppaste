@@ -14,7 +14,7 @@
 # Variables
 ###############################################################
 
-version="0.5.15"
+version="0.5.16"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
@@ -640,7 +640,7 @@ help_page()
     printf " %-${help_width}s Delete history\n" "-r, --delete-history"
 
     printf "\nDownload:\n"
-    printf " %-${help_width}s Download file using url or hash\n" "-d, --download <url>[,<hash]"
+    printf " %-${help_width}s Download file using url or hash\n" "-d, --download <url>[,<hash>]"
     printf " %-${help_width}s Download alive links\n" "-D, --download-alive"
     printf " %-${help_width}s Delete download folder\n" "-R, --delete-download"
 

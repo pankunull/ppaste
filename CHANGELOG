@@ -1,3 +1,6 @@
+Changelog 0.5.16
+    - fixed typo in the help page
+
 Changelog 0.5.15
     - fixed table history not showing alive or dead
     - fixed 'download_alive' function
