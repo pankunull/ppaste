@@ -1,10 +1,16 @@
 #!/bin/sh
 
 # Written by: panku
-# Thanks to: o1, deesix, genunix
+# Thanks to: o1, deesix, blastwave
+
 
 # Source code is hosted on : "https://www.github.com/pankunull/ppaste"
+
+# Alternative mirror       : "https://www.genunix.com/panku/ppaste/ppaste.sh"
+# Sha256sum                : "https://www.genunix.com/panku/ppaste/sha256sum.txt"
+
 # Pastebin is hosted on    : "https://www.oetec.com/pastebin"
+
 
 # POSIX
 
@@ -14,7 +20,7 @@
 # Variables
 ###############################################################
 
-version="0.5.17a"
+version="0.5.17b"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
