@@ -696,16 +696,16 @@ file_upload()
 
     ### Payload check
     if ! [ -f "$file" ]; then
-        error "file doesn't exist"
+        error "'$file' doesn't exist" ; echo
         return
     elif ! [ -r "$file" ]; then
-        error "file '$file' is not readable"
+        error "'$file' is not readable" ; echo 
         return
     elif ! [ -s "$file" ]; then
-        error "file '$file' is empty"
+        error "'$file' is empty" ; echo
         return
     elif [ ! "$(wc -c < "$file")" -lt "$file_max_size" ]; then
-        error "file '$file' exceeds size limit ($((file_max_size / 1000000)) MB)"
+        error "'$file' exceeds size limit ($((file_max_size / 1000000)) MB)" ; echo
         return
     else
         file_to_upload="pastefile=@$file"
@@ -901,12 +901,6 @@ done
 ###############################################################
 
 while [ $# -gt 0 ]; do
-    if [ -f "$1" ]; then
-        file_upload "$1"
-        file_flag=1
-    fi
-
-
     case "$1" in
         # Options
         -e|--expire-time)
@@ -964,17 +958,22 @@ while [ $# -gt 0 ]; do
         -v|--version)
                 version
                 ;;
-        #*)
-        #        #error "invalid argument"
-        #        #usage
-        #        ;;
+        *)
+            # I will keep the commented code until further releases and tests
+                #if [ -f "$1" ]; then
+                    file_upload "$1"
+                    #file_flag=1
+                #else
+                #    printf "%s is not a valid file\n" "$1"
+               
+                ;;
     esac ; shift
 
 done
 
-    if [ "$file_flag" -eq 0 ]; then
-        error "no valid file"
-    fi
+    #if [ "$file_flag" -eq 0 ]; then
+    #    printf "no valid file\n"
+    #fi
 
 
 ###############################################################
