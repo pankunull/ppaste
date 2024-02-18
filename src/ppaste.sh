@@ -59,7 +59,6 @@ error()
 }
 
 
-
 error_no_arg()
 {
     printf "error: missing argument\n\n"
@@ -84,7 +83,6 @@ save_session()
     
     save_session=1
 }
-
 
 
 expire_time()
