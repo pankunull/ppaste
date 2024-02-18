@@ -14,7 +14,7 @@
 # Variables
 ###############################################################
 
-version="0.5.17"
+version="0.5.17a"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
@@ -745,7 +745,7 @@ file_upload()
 
     ### Payload's informations
     ### Time
-    epoch_create_time="$(date '+%s')"
+    epoch_create_time="$(date +%s)"
     date_create_time="$(date --date @"$epoch_create_time" 2>/dev/null || \
                         date -r "$epoch_create_time")"
     

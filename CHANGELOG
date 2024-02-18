@@ -1,3 +1,6 @@
+Version 0.5.17a
+    - fixed but when creating epoch date
+
 Version 0.5.17
     - improved file/hash check for download function
 
