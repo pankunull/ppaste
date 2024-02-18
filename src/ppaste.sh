@@ -83,7 +83,6 @@ save_session()
     fi 
     
     save_session=1
-
 }
 
 
@@ -862,7 +861,7 @@ error_arg()
 
 
 ### Using variables to store arguments
-ARG_OPTIONS="e expire-time f files s save-session"
+ARG_OPTIONS="e expire-time f files s save-session S no-save"
 ARG_FORMAT="o output-format"
 ARG_HISTORY="l history L history-table r delete-history"
 ARG_DOWNLOAD="d download-url D download-hash R delete-download"
@@ -909,6 +908,9 @@ while [ $# -gt 0 ]; do
                 ;;
         -s|--save-session)
                 save_session
+                ;;
+        -S|--no-save)
+                save_session=0
                 ;;
         # Output
         -o|--output-format)
