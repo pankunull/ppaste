@@ -1,25 +1,28 @@
-Changelog 0.5.16
+Version 0.5.17
+    - improved file/hash check for download function
+
+Version 0.5.16
     - fixed typo in the help page
 
-Changelog 0.5.15
+Version 0.5.15
     - fixed table history not showing alive or dead
     - fixed 'download_alive' function
     - fixes 'delete_download' function
 
-Changelog 0.5.14
+Version 0.5.14
     - fixed bug where 'epoch_expire_time' was wrong
 
-Changelog 0.5.13
+Version 0.5.13
     - added error code check for curl
 
-Changelog 0.5.12
+Version 0.5.12
     - fixed unix date conversion
 
-Changelog 0.5.11
+Version 0.5.11
     - fixed 'check_link'
     - fixed 'date -r'
 
-Changelog 0.5.00
+Version 0.5.00
     - complete code rework
     - added long option argument
     - script can now paste different file with different flag
@@ -28,60 +31,60 @@ Changelog 0.5.00
     - check lifetime supports both 'url' and 'hash'
     - expire time now accepts '0' as 4 hours
 
-Changelog 0.4.53
+Version 0.4.53
     - added 'delete_download' function
 
-Changelog 0.4.52
+Version 0.4.52
     - improved 'download' function
     - added file name in the history file
     - reworked 'show_history_full'
     - changed ppaste directory from ~/.ppaste to ~/ppaste
 
-Changelog 0.4.51
+Version 0.4.51
     - added 'delete_history' function
     - fixed 'download' function
 
-Changelog 0.4.50
+Version 0.4.50
     - simplified version check
     - removed sha256sum.txt
 
-Changelog 0.4.49
+Version 0.4.49
     - change split from ':' to '-'
     - added more informations to function 'check_lifetime'
 
-Changelog 0.4.48
+Version 0.4.48
     - reworked the whole 'show_history_full()' function
     - replaced while command to awk (+10x quicker)
     - fixed warnings
 
-Changelog 0.4.47
+Version 0.4.47
     - removed support for text
     - cleaned code
 
-Changelog 0.4.46
+Version 0.4.46
     - removed '--max-time' option
     - improved output format when sending file/text
     - fixed error in show history (alive/dead links)
     - fixed error where expired date wasn't correctly converted from epoch
 
-Changelog 0.4.45
+Version 0.4.45
     - cleaned the code
     - added posix tag
     - added space after banner
 
-Changelog 0.4.44
+Version 0.4.44
     - fixed an issue where links would not appear after
       the progress bar if one of the output flag was used 
     - improved output for links at the end
 
-Changelog 0.4.43
+Version 0.4.43
     - using sha256sum instead of openssl command
     - fixed all warning using "https://www.shellcheck.net/"
 
-Changelog 0.4.42
+Version 0.4.42
     - moved host to Github 
 
-Changelog 0.4.41
+Version 0.4.41
     - added hash check
     - added 'force upgrade' function
     - changed banner
@@ -89,6 +92,6 @@ Changelog 0.4.41
     - new help menu
     - added 'show_history_full' function with table format
 
-Changelog 0.4.40
+Version 0.4.40
     - fixed bug in check_lifetime
 

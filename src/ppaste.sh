@@ -14,7 +14,7 @@
 # Variables
 ###############################################################
 
-version="0.5.16"
+version="0.5.17"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
@@ -250,6 +250,14 @@ delete_history()
 
 download()
 {
+    if [ -z "$1" ]; then
+        printf "error: missing link or hash\n\n"
+
+        printf "Examples:\n"
+        printf " - 12345678\n"
+        printf " - https://www.oetec.com/pastebin/plain/12345678\n\n"
+    fi
+
     if [ ! -d "$download_dir" ]; then
         printf "Creating download folder: %s\n\n" "$download_dir"
     
@@ -258,11 +266,10 @@ download()
         fi
     fi
 
-
     for link in $1; do
         ### Check if the link is valid using grep
         ### If the header contains the expiration date it's a valid link
-        if echo "$link" | grep -q "$pastebin"; then
+        if echo "$link" | grep -q "$pastebin/plain/" && [ "${#link}" = '45' ]; then
             download_hash="$(echo "$link" | cut -d '|' -f1 | rev | cut -d '/' -f1 | rev)"
             download_link="$pastebin"/plain/"$download_hash"
 
@@ -271,7 +278,8 @@ download()
             download_link="$pastebin"/plain/"$link"
 
         else
-            error "not a valid link or hash" 1
+            printf "error: '%s' is not a valid link or hash\n\n" "$link"
+            continue
         fi
         
 
@@ -293,13 +301,13 @@ download()
                             -o "$download_name" \
                             --output-dir "$download_dir"
 
-            printf "\n"
+            printf "%${width}s : %s\n\n" "File" "$download_dir/$download_name"
         else
-            printf "File %s already exist\n\n" "$download_name"
+            printf "File '%s' already exist\n\n" "$download_name"
         fi
     done
 
-    printf "Done: %s\n" "$download_dir"
+    printf "Download dir: %s\n" "$download_dir"
 
     exit 0
 }
@@ -331,6 +339,8 @@ download_alive()
     
     fi
 
+    printf "Downlaod dir: %s\n\n" "$download_dir"
+
     download_number="$(echo "$history_download" | wc -l)"
 
     printf "If the file is already in the folder it won't be downloaded.\n\n"
@@ -352,21 +362,23 @@ download_alive()
     for link in $history_download; do
         download_hash="$(echo "$link" | cut -d '|' -f1 | rev | cut -d '/' -f1 | rev)"
         download_name="$(echo "$link" | rev | cut -d '|' -f1 | rev)"
+        download_full="$download_hash-$download_name"
         download_link="$pastebin/plain/$download_hash"
 
-        if [ ! -f "$download_dir"/"$download_name" ]; then
+        if [ ! -f "$download_dir"/"$download_full" ]; then
             printf "%${width}s : %s\n" "Downloading" "$download_name"
 
             COLUMNS=63 curl --progress-bar -# -4 -L \
                             --url "$download_link" \
-                            -o "$download_name" \
+                            -o "$download_full" \
                             --output-dir "$download_dir"
 
-            printf "\n"
+            printf "%${width}s : %s\n" "Hash" "$download_hash"
+            printf "%${width}s : %s\n\n" "File" "$download_dir/$download_full"
         fi
     done
 
-    printf "Done: %s\n\n" "$download_dir"
+    printf "Download dir: %s\n" "$download_dir"
 
     exit 0
 }
