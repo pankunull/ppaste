@@ -716,6 +716,13 @@ file_upload()
     printf "Sending: %s\n" "$file"
     
 
+    ### Payload's informations
+    ### Time
+    epoch_create_time="$(date +%s)"
+    date_create_time="$(date --date @"$epoch_create_time" 2>/dev/null || \
+                        date -r "$epoch_create_time")"
+
+    
     ### Liftoff
     payload="$(COLUMNS=63 \
                 curl --progress-bar --output - -# \
@@ -743,20 +750,13 @@ file_upload()
     fi
 
 
-    ### Payload's informations
-    ### Time
-    epoch_create_time="$(date +%s)"
-    date_create_time="$(date --date @"$epoch_create_time" 2>/dev/null || \
-                        date -r "$epoch_create_time")"
-    
-
     ### Create epoch and date
     #### Calculating the time using an offset it's easier for POSIX compatibility
     if [ "$lifetime" -eq 0 ]; then
         epoch_expire_time="$(( epoch_create_time + 14000 ))"
         date_expire_time="$(date --date @"$epoch_expire_time" 2>/dev/null || \
                             date -r "$epoch_expire_offset")"
-    else
+    elif [ "$lifetime" -gt 0]; then
         epoch_expire_offset="$(( lifetime * 86400 ))"
         epoch_expire_time="$(( epoch_create_time + epoch_expire_offset ))"
         date_expire_time="$(date --date @"$epoch_expire_time" 2>/dev/null || \
