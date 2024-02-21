@@ -737,7 +737,7 @@ file_upload()
 
     ### Error code 
     #if [ "$?" -gt 0 ]; then
-    if [ "$?" ]; then
+    if ! [ "$?" ]; then
         error "curl failed" 1
     fi
 
