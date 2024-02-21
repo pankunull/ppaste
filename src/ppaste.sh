@@ -20,7 +20,7 @@
 # Variables
 ###############################################################
 
-version="0.5.17b"
+version="0.5.18"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
@@ -433,16 +433,16 @@ check_link()
         download_link="$pastebin"/plain/"$link"
 
     else
-        error "not a valid link or hash" 1
+        error "not a valid link or hash"
     fi
     
 
     if ! headers="$($pwcmd -I --url "$download_link")"; then
-        error  "curl error" 1
+        error  "curl error"
     fi
         
     if ! echo "$headers" | grep 'Expires'; then
-        error "paste not valid or expired" 1
+        error "paste not valid or expired"
     fi
 
     #download_name="$(echo "$headers" | grep filename | cut -d '=' -f2 | tr -d '"\r')"
