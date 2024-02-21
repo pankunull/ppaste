@@ -41,7 +41,7 @@ download_dir=~/"$script_name"/download
 save_session=0
 lifetime=0
 format=none
-file_flag=0
+#file_flag=0
 
 file_max_size=300000000
 
@@ -420,66 +420,72 @@ delete_download()
 
 check_link()
 {
-    link="$1"
+    #links="$1"
 
-    ### Check if the link is valid using grep
-    ### If the header contains the expiration date it's a valid link
-    if echo "$link" | grep -q "$pastebin"; then
-        download_hash="$(echo "$link" | cut -d '|' -f1 | rev | cut -d '/' -f1 | rev)"
-        download_link="$pastebin"/plain/"$download_hash"
+    for link in $1; do 
 
-    elif [ "${#link}" = '8' ]; then
-        download_hash="$link"
-        download_link="$pastebin"/plain/"$link"
+        ### Check if the link is valid using grep
+        ### If the header contains the expiration date it's a valid link
+        if echo "$link" | grep -q "$pastebin"; then
+            download_hash="$(echo "$link" | cut -d '|' -f1 | rev | cut -d '/' -f1 | rev)"
+            download_link="$pastebin"/plain/"$download_hash"
 
-    else
-        error "not a valid link or hash"
-    fi
-    
+        elif [ "${#link}" = '8' ]; then
+            download_hash="$link"
+            download_link="$pastebin"/plain/"$link"
 
-    if ! headers="$($pwcmd -I --url "$download_link")"; then
-        error  "curl error"
-    fi
+        else
+            error "not a valid link or hash"
+            continue
+        fi
         
-    if ! echo "$headers" | grep 'Expires'; then
-        error "paste not valid or expired"
-    fi
 
-    #download_name="$(echo "$headers" | grep filename | cut -d '=' -f2 | tr -d '"\r')"
+        if ! headers="$($pwcmd -I --url "$download_link")"; then
+            error  "curl error"
+            continue
+        fi
+            
+        if ! echo "$headers" | grep 'Expires'; then
+            error "paste not valid or expired"
+            continue
+        fi
 
-    server_hash="$(echo "$link" | rev | cut -d '/' -f1 | rev)"
-    server_type="$(echo "$headers" | grep "Type: " | cut -d ' ' -f2-)"
+        #download_name="$(echo "$headers" | grep filename | cut -d '=' -f2 | tr -d '"\r')"
 
-    headers="$(echo "$headers" | tr -d '\r')"
+        server_hash="$(echo "$link" | rev | cut -d '/' -f1 | rev)"
+        server_type="$(echo "$headers" | grep "Type: " | cut -d ' ' -f2-)"
 
-    server_create_date="$(echo "$headers" | grep "Date: " | cut -d ' ' -f2-)"
-    server_expire_date="$(echo "$headers" | grep "Expires: " | cut -d ' ' -f2-)"
+        headers="$(echo "$headers" | tr -d '\r')"
 
-    server_epoch_create="$(date --date "$server_create_date" +%s 2>/dev/null || \
-                           date -j -f '%a%d%b%Y%H%M%S%Z' "$(echo "$server_create_date" | tr -d ' ,:')" +%s)"
+        server_create_date="$(echo "$headers" | grep "Date: " | cut -d ' ' -f2-)"
+        server_expire_date="$(echo "$headers" | grep "Expires: " | cut -d ' ' -f2-)"
 
-    server_epoch_expire="$(date --date "$server_expire_date" +%s 2>/dev/null || \
-                           date -j -f '%a%d%b%Y%H%M%S%Z' "$(echo "$server_expire_date" | tr -d ' ,:')" +%s)"
+        server_epoch_create="$(date --date "$server_create_date" +%s 2>/dev/null || \
+                               date -j -f '%a%d%b%Y%H%M%S%Z' "$(echo "$server_create_date" | tr -d ' ,:')" +%s)"
 
-    local_create_date="$(date --date @"$server_epoch_create" 2>/dev/null || \
-                         date -r "$server_epoch_expire")"
-    local_expire_date="$(date --date @"$server_epoch_expire" 2>/dev/null || \
-                         date -r "$server_epoch_expire")"
+        server_epoch_expire="$(date --date "$server_expire_date" +%s 2>/dev/null || \
+                               date -j -f '%a%d%b%Y%H%M%S%Z' "$(echo "$server_expire_date" | tr -d ' ,:')" +%s)"
+
+        local_create_date="$(date --date @"$server_epoch_create" 2>/dev/null || \
+                             date -r "$server_epoch_expire")"
+        local_expire_date="$(date --date @"$server_epoch_expire" 2>/dev/null || \
+                             date -r "$server_epoch_expire")"
 
 
-    offset=$(( server_epoch_expire - server_epoch_create ))
+        offset=$(( server_epoch_expire - server_epoch_create ))
 
-    printf "%${width}s : %s\n" "Created on" "$local_create_date"
-    printf "%${width}s : %s\n" "Epires on" "$local_expire_date"
-    printf "%${width}s : %s\n" "Hash" "$server_hash"
-    printf "%${width}s : %s\n" "Type" "$server_type"
+        printf "%${width}s : %s\n" "Created on" "$local_create_date"
+        printf "%${width}s : %s\n" "Epires on" "$local_expire_date"
+        printf "%${width}s : %s\n" "Hash" "$server_hash"
+        printf "%${width}s : %s\n" "Type" "$server_type"
 
-    printf "%${width}s : %sd %sh %sm %ss\n\n" \
-        "Lifetime" \
-        "$((  offset / 86400))" \
-        "$(( (offset % 86400) / 3600))" \
-        "$(( (offset % 3600) / 60))" \
-        "$((  offset % 60))"
+        printf "%${width}s : %sd %sh %sm %ss\n\n" \
+            "Lifetime" \
+            "$((  offset / 86400))" \
+            "$(( (offset % 86400) / 3600))" \
+            "$(( (offset % 3600) / 60))" \
+            "$((  offset % 60))"
+    done
 
     exit 0
 }
@@ -730,7 +736,8 @@ file_upload()
  
 
     ### Error code 
-    if [ "$?" -gt 0 ]; then
+    #if [ "$?" -gt 0 ]; then
+    if [ "$?" ]; then
         error "curl failed" 1
     fi
 
@@ -949,7 +956,7 @@ while [ $# -gt 0 ]; do
         # Utilities
         -c|--check)
                 shift 1
-                check_link "$1"
+                check_link "$*"
                 ;;
         # Misc
         -u|--upgrade)
