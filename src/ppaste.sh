@@ -272,11 +272,14 @@ download()
     for link in $1; do
         ### Check if the link is valid using grep
         ### If the header contains the expiration date it's a valid link
-        if echo "$link" | grep -q "$pastebin/plain/" && [ "${#link}" = '45' ]; then
+        if echo "$link" | grep -q -E -o "$pastebin/[[:alnum:]]{8}" ||
+           echo "$link" | grep -q -E -o "$pastebin/plain/[[:alnum:]]{8}" ||
+           echo "$link" | grep -q -E -o "$pastebin/lined/[[:alnum:]]{8}"; then
             download_hash="$(echo "$link" | cut -d '|' -f1 | rev | cut -d '/' -f1 | rev)"
             download_link="$pastebin"/plain/"$download_hash"
 
-        elif [ "${#link}" = '8' ]; then
+        #elif [ "${#link}" = '8' ]; then
+        elif echo "$link" | grep -q -E -o "[[:alnum:]]{8}"; then
             download_hash="$link"
             download_link="$pastebin"/plain/"$link"
 
