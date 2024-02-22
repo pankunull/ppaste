@@ -1,3 +1,6 @@
+Version 0.5.19
+    - show_history_table now print '-' = COLUMNS
+
 Version 0.5.18
     - fixed error for 'check_link'
 

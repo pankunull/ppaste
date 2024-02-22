@@ -20,7 +20,7 @@
 # Variables
 ###############################################################
 
-version="0.5.18"
+version="0.5.19"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
@@ -185,7 +185,8 @@ show_history_table()
         exit 0
     fi
 
-    minus=128
+    #minus=128
+    minus=$COLUMNS
 
     # Table's header
     {
