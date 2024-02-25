@@ -43,7 +43,10 @@ The history is saved in `"$HOME"/ppaste/history`
 
 
 ### Display format
-The server generates 3 links: **editor**, **plain** and **lined**.
+The server generates 3 links:
++ `editor: edit the paste from the website`
++ `plain: direct link to the file`
++ lined: display line numbers`
 
 You can choose which links to display after all files are pasted.
 
