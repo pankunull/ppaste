@@ -42,10 +42,10 @@ The history is saved in `"$HOME"/ppaste/history`
 
 The server generates 3 links: **editor**, **plain** and **lined**.
 
-You can choose which links to display at the end using: 
+You can choose which links to display, for example to show only **plain** links: 
 
 ```
---output-format FORMAT
+./ppaste.sh --output-format plain file1
 ```
 
 For example, if you need to upload multiples files and grab all the plain links: 
