@@ -518,23 +518,23 @@ upgrade()
     if [ "$force_flag" = "0" ]; then
 
         ### Grab version
-        server_source="$(echo "$server_source" |\
+        server_version="$(echo "$server_source" |\
                           grep -m 1 "version" |\
                           cut -d '=' -f2 |\
                           tr -d '"')"
 
 
         ### Check if the new version has been grabbed
-        if [ -z "$server_source" ]; then
+        if [ -z "$server_version" ]; then
             error "can't fetch version" 1
         fi
         
         printf "Local version  : %s\n%s\n\n" "$version" "$script_hash"
-        printf "Latest version : %s\n%s\n\n" "$server_source" "$server_hash"
+        printf "Latest version : %s\n%s\n\n" "$server_version" "$server_hash"
 
 
         ### Check version
-        if [ "$version" = "$server_source" ]; then
+        if [ "$version" = "$server_version" ]; then
             printf "Up-to-date\n\n"
 
             if [ "$server_hash" != "$script_hash" ]; then
@@ -953,3 +953,4 @@ if [ -n "$link_list" ]; then
 
     printf "%s\n" "$link_list"
 fi
+
