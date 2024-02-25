@@ -560,14 +560,14 @@ upgrade()
 
 
     ## Upgrade
-    echo "$source_version" >> /tmp/"$script_name".new
+    echo "$server_version" >> /tmp/"$script_name".new
 
     ## Hash check
-    new_version_hash="$(sha256sum /tmp/${script_name}.new | cut -d ' ' -f1)"
+    new_version_hash="$(sha256sum /tmp/"${script_name}".new | cut -d ' ' -f1)"
 
     if [ "$new_version_hash" != "$server_hash" ]; then
         printf "ATTENTION: the file downloaded is compromised\n"
-        rm -v -i /tmp/${script_name}.new
+        rm -v -i /tmp/"${script_name}".new
         exit 1
     fi
 
