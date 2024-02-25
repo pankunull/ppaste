@@ -138,7 +138,7 @@ show_history()
         
     case "$1" in
         alive) history_links="$(awk -F\| '$3 > '"$(date +%s)"'' "$history_file")" ;;
-         dead) history_links="$(awk -F\| '$3 < '"$(date +%s)"'' "$history_file")" ;;
+      expired) history_links="$(awk -F\| '$3 < '"$(date +%s)"'' "$history_file")" ;;
           all) history_links="$(cat "$history_file")" ;;
         *)
             error "bad argument"
@@ -172,7 +172,7 @@ show_history_table()
 
     case "$1" in
         alive) history_links="$(awk -F\| '$3 > '"$(date +%s)"'' "$history_file")" ;;
-         dead) history_links="$(awk -F\| '$3 < '"$(date +%s)"'' "$history_file")" ;;
+      expired) history_links="$(awk -F\| '$3 < '"$(date +%s)"'' "$history_file")" ;;
           all) history_links="$(cat "$history_file")" ;;
         *)
             error "bad argument"
@@ -607,13 +607,13 @@ help_page()
     printf " %-${help_width}s Save session in history\n" "-s, --save-session"
 
     printf "\nOutput:\n"
-    printf " %-${help_width}s Print links at the end of the session\n" "-o, --output-format <FORMAT>"
+    printf " %-${help_width}s Display links at the end\n" "-o, --output-format <FORMAT>"
     printf " %-${help_width}s FORMAT is 'all', 'editor', 'plain', 'lined'\n" " "
     
     printf "\nHistory:\n"
-    printf " %-${help_width}s Show normal history (links)\n" "-l, --history <FORMAT>"
+    printf " %-${help_width}s Show history (links)\n" "-l, --history <FORMAT>"
     printf " %-${help_width}s Show formatted history (table)\n" "-L, --history-table <FORMAT>"
-    printf " %-${help_width}s FORMAT is 'alive', 'dead', 'all'\n" " "
+    printf " %-${help_width}s FORMAT is 'all', 'alive', 'expired'\n" " "
     printf " %-${help_width}s Delete history\n" "-r, --delete-history"
 
     printf "\nDownload:\n"
