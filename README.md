@@ -50,7 +50,7 @@ For example, if you need to upload multiples files and grab all the plain links:
 ```
 
 
-To display the history of all the links that are still alive: 
+To display the history of the links that are still alive:
 
 ```
 ./ppaste.sh --history alive
