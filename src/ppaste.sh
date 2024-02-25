@@ -533,8 +533,7 @@ upgrade()
 
 
         ### Check version
-        if [ "$(echo "$version" | tr -d '.')" = \
-             "$(echo "$server_version" | tr -d '.')" ]; then
+        if [ "$version" = "$server_version" ]; then
             printf "Up-to-date\n\n"
 
             if [ "$server_hash" != "$script_hash" ]; then
@@ -560,7 +559,7 @@ upgrade()
 
 
     ## Upgrade
-    if ! $cmd --url "$github_source" \
+    if ! "$cmd" --url "$github_source" \
                  --output /tmp/"$script_name".new; then
         error "curl failed"
     fi
