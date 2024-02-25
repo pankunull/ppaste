@@ -1,5 +1,9 @@
 # ppaste
 
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="">
+</picture>
+
 ## Description
 ppaste is a POSIX bash script that paste files at oetec.com/pastebin via shell.
 

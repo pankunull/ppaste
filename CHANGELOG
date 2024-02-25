@@ -5,7 +5,11 @@ Version 0.5.20
     - improved version check in the upgrade function
     - improved 'upgrade' so now download the script once
     - added hash check in 'upgrade' for the new script
+    - fixed check_link
+    - add check when the user doesn't pass any files
     - added README
+    - added 'docs'
+    - added screenshot
 
 Version 0.5.19
     - show_history_table now print '-' = COLUMNS

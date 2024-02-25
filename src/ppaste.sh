@@ -41,7 +41,8 @@ download_dir=~/"$script_name"/download
 save_session=0
 lifetime=0
 format=none
-#file_flag=0
+
+file_flag=0
 
 file_max_size=300000000
 
@@ -449,7 +450,7 @@ check_link()
             continue
         fi
             
-        if ! echo "$headers" | grep 'Expires'; then
+        if ! echo "$headers" | grep -q 'Expires'; then
             error "paste not valid or expired"
             continue
         fi
@@ -479,7 +480,7 @@ check_link()
         offset=$(( server_epoch_expire - server_epoch_create ))
 
         printf "%${width}s : %s\n" "Created on" "$local_create_date"
-        printf "%${width}s : %s\n" "Epires on" "$local_expire_date"
+        printf "%${width}s : %s\n" "Expires on" "$local_expire_date"
         printf "%${width}s : %s\n" "Hash" "$server_hash"
         printf "%${width}s : %s\n" "Type" "$server_type"
 
@@ -605,6 +606,7 @@ help_page()
     printf " %-${help_width}s Expire time (w/given is 4 hours)\n" "-e, --expire-time NUM"
     printf " %-${help_width}s NUM is '0' for 4 hours and '1-7' for days\n" " "
     printf " %-${help_width}s Save session in history\n" "-s, --save-session"
+    printf " %-${help_width}s Don't save session\n" "-S, --no-save"
 
     printf "\nOutput:\n"
     printf " %-${help_width}s Display links at the end\n" "-o, --output-format <FORMAT>"
@@ -674,6 +676,7 @@ file_upload()
         return
     else
         file_to_upload="pastefile=@$file"
+        file_flag=1
     fi 
 
 
@@ -928,21 +931,15 @@ while [ $# -gt 0 ]; do
                 version
                 ;;
         *)
-            # I will keep the commented code until further releases and tests
-                #if [ -f "$1" ]; then
-                    file_upload "$1"
-                    #file_flag=1
-                #else
-                #    printf "%s is not a valid file\n" "$1"
-               
+                file_upload "$1"
                 ;;
     esac ; shift
 
 done
 
-    #if [ "$file_flag" -eq 0 ]; then
-    #    printf "no valid file\n"
-    #fi
+if [ "$file_flag" = 0 ]; then
+    usage
+fi
 
 
 ###############################################################
