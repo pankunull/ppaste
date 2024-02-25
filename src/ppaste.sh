@@ -508,10 +508,10 @@ upgrade()
 
     ### Check if source is reachable
 
-    if ! server_source="$($cmd --url "$github_source")"; then
-        error "curl failed" 1
+    if ! server_source=$cmd --url "$github_source"; then
+        error "can't fetch source code" 1
     elif ! server_hash="$($cmd --url "$github_hash" | cut -d ' ' -f1)"; then
-        error "curl failed" 1
+        error "can't fetch signature" 1
     fi
 
     ### Force flag is required if '--force-upgrade' is invoked
@@ -560,7 +560,7 @@ upgrade()
 
 
     ## Upgrade
-    echo "$server_source" >> /tmp/"$script_name".new
+    printf "$server_source" >> /tmp/"$script_name".new
 
     ## Hash check
     new_version_hash="$(sha256sum /tmp/"${script_name}".new | cut -d ' ' -f1)"
