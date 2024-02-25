@@ -26,14 +26,14 @@ ppaste is a POSIX bash script that paste files at oetec.com/pastebin via shell.
 
 To display the help page: 
 
-```
+```bash
 ./ppaste.sh --help
 ```
 
 
 To just paste a file: 
 
-```
+```bash
 ./ppaste.sh file1
 
 Sending: /tmp/foobar.txt
