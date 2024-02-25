@@ -39,9 +39,9 @@ You can save the current session and set the expire date:
 ./ppaste.sh --save-session --expire-time 7 file1 file2
 ```
 
+---
 
 ### Display format
----
 The server generates 3 links:
 + editor: edit the paste from the website
 + plain: direct link to the file
@@ -53,8 +53,9 @@ If you want to display all links when all files are uploaded you can use `--outp
 ./ppaste.sh --output-format plain file1 file2
 ```
 
-### History
 ---
+
+### History
 The history is saved in `"$HOME"/ppaste/history`
 
 To display the history of the links that are still alive:
@@ -69,9 +70,9 @@ You can display more information for each paste using:
 ./ppaste.sh --history-table alive
 ```
 
+---
 
 ### Download
----
 You can download multiple paste from the server using the hash or the link: 
 
 ```
