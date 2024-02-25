@@ -60,9 +60,9 @@ You can save the current session and set the expire date:
 
 ### Display format
 The server generates 3 links:
-+ editor: edit the paste from the website
-+ plain: direct link to the file
-+ lined: display line numbers
++ **editor** (edit the paste from the website)
++ **plain** (direct link to the file)
++ **lined** (display line numbers)
 
 If you want to display all links when all files are uploaded you can use `--output-format` or short `-o`.
 
