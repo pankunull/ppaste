@@ -613,14 +613,14 @@ help_page()
     printf " %-${help_width}s FORMAT is 'all', 'editor', 'plain', 'lined'\n" " "
     
     printf "\nHistory:\n"
-    printf " %-${help_width}s Display history (links)\n" "-l, --history <FORMAT>"
-    printf " %-${help_width}s Display formatted history (table)\n" "-L, --history-table <FORMAT>"
+    printf " %-${help_width}s Display simple history (show links)\n" "-l, --history <FORMAT>"
+    printf " %-${help_width}s Display formatted history (link,date,lifetime,filename)\n" "-L, --history-table <FORMAT>"
     printf " %-${help_width}s FORMAT is 'all', 'alive', 'expired'\n" " "
     printf " %-${help_width}s Delete history\n" "-r, --delete-history"
 
     printf "\nDownload:\n"
     printf " %-${help_width}s Download paste using url or hash\n" "-d, --download <link1|hash1|...2>"
-    printf " %-${help_width}s Download alive paste from the history\n" "-D, --download-alive"
+    printf " %-${help_width}s Download alive pastes from the history\n" "-D, --download-alive"
     printf " %-${help_width}s Delete download folder\n" "-R, --delete-download"
 
     printf "\nUtilities:\n"
