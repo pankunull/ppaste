@@ -48,7 +48,7 @@ The server generates 3 links:
 + plain: direct link to the file
 + lined: display line numbers
 
-You can choose which links to display after all files are pasted.
+If you want to display all links at the end of paste you can use `--output-format` or short `-o`.
 
 If you need to upload multiples files and grab all the plain links: 
 
