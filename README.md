@@ -30,6 +30,18 @@ To just paste a file:
 
 ```
 ./ppaste.sh file1
+
+Sending: /tmp/foobar.txt
+######################################################## 100.0%
+   Created on : Sun Feb 25 23:28:48 CET 2024
+   Expires on : Mon Feb 26 03:22:08 CET 2024
+     Lifetime : 4 hours
+         Hash : bvt2Cqdw
+ Save session : false
+       Editor : https://www.oetec.com/pastebin/bvt2Cqdw
+        Lined : https://www.oetec.com/pastebin/lined/bvt2Cqdw
+        Plain : https://www.oetec.com/pastebin/plain/bvt2Cqdw
+
 ```
 
 
@@ -51,10 +63,7 @@ If you want to display all links when all files are uploaded you can use `--outp
 
 ```
 ./ppaste.sh --output-format plain file1 file2
-```
-
-```
-Sending: /tmp/foobar.txt
+Sending: file1
 ######################################################## 100.0%
    Created on : Sun Feb 25 23:26:32 CET 2024
    Expires on : Mon Feb 26 03:19:52 CET 2024
@@ -65,7 +74,7 @@ Sending: /tmp/foobar.txt
         Lined : https://www.oetec.com/pastebin/lined/bvt2aALW
         Plain : https://www.oetec.com/pastebin/plain/bvt2aALW
 
-Sending: /tmp/foobar.txt
+Sending: file2
 ######################################################## 100.0%
    Created on : Sun Feb 25 23:26:32 CET 2024
    Expires on : Mon Feb 26 03:19:52 CET 2024
