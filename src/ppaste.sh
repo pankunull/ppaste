@@ -620,7 +620,7 @@ help_page()
 
     printf "\nDownload:\n"
     printf " %-${help_width}s Download paste using url or hash\n" "-d, --download <link1|hash1|...2>"
-    printf " %-${help_width}s Download all alive paste\n" "-D, --download-alive"
+    printf " %-${help_width}s Download alive paste from the history\n" "-D, --download-alive"
     printf " %-${help_width}s Delete download folder\n" "-R, --delete-download"
 
     printf "\nUtilities:\n"
