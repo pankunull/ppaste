@@ -514,8 +514,6 @@ upgrade()
         error "curl failed" 1
     fi
 
-    exit 0
-
     ### Force flag is required if '--force-upgrade' is invoked
     if [ "$force_flag" = "0" ]; then
 
