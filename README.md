@@ -39,8 +39,6 @@ You can save the current session and set the expire date:
 ./ppaste.sh --save-session --expire-time 7 file1 file2
 ```
 
-The history is saved in `"$HOME"/ppaste/history`
-
 
 ### Display format
 The server generates 3 links:
@@ -57,6 +55,8 @@ If you need to upload multiples files and grab all the plain links:
 ```
 
 ### History
+The history is saved in `"$HOME"/ppaste/history`
+
 To display the history of the links that are still alive:
 
 ```
