@@ -1,7 +1,7 @@
 # ppaste
 
 <picture>
-<source media="(prefers-color-scheme: dark)" srcset="">
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/pankunull/ppaste/main/docs/screenshot.png">
 </picture>
 
 ## Description
