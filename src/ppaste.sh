@@ -953,4 +953,3 @@ if [ -n "$link_list" ]; then
 
     printf "%s\n" "$link_list"
 fi
-
