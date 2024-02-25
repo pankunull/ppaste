@@ -619,12 +619,12 @@ help_page()
     printf " %-${help_width}s Delete history\n" "-r, --delete-history"
 
     printf "\nDownload:\n"
-    printf " %-${help_width}s Download file using url or hash\n" "-d, --download <link1|hash1|...2>"
-    printf " %-${help_width}s Download alive links\n" "-D, --download-alive"
+    printf " %-${help_width}s Download paste using url or hash\n" "-d, --download <link1|hash1|...2>"
+    printf " %-${help_width}s Download all alive paste\n" "-D, --download-alive"
     printf " %-${help_width}s Delete download folder\n" "-R, --delete-download"
 
     printf "\nUtilities:\n"
-    printf " %-${help_width}s Check expiration date via url or hash\n" "-c, --check <link1|hash1|...2>"
+    printf " %-${help_width}s Check paste informations\n" "-c, --check <link1|hash1|...2>"
 
     printf "\nMisc:\n"
     printf " %-${help_width}s Upgrade\n" "-u, --upgrade"

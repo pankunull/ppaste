@@ -124,7 +124,7 @@ You can download multiple paste from the server using the hash or the link:
 ```
 
 
-To download all the links that are still alive: 
+To download all the paste that are still alive: 
 
 ```
 ./ppaste.sh --download-alive
