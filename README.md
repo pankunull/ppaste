@@ -41,6 +41,7 @@ You can save the current session and set the expire date:
 
 
 ### Display format
+---
 The server generates 3 links:
 + editor: edit the paste from the website
 + plain: direct link to the file
@@ -53,6 +54,7 @@ If you want to display all links when all files are uploaded you can use `--outp
 ```
 
 ### History
+---
 The history is saved in `"$HOME"/ppaste/history`
 
 To display the history of the links that are still alive:
@@ -69,6 +71,7 @@ You can display more information for each paste using:
 
 
 ### Download
+---
 You can download multiple paste from the server using the hash or the link: 
 
 ```
