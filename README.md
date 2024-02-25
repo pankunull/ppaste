@@ -53,6 +53,36 @@ If you want to display all links when all files are uploaded you can use `--outp
 ./ppaste.sh --output-format plain file1 file2
 ```
 
+```
+Sending: /tmp/foobar.txt
+######################################################## 100.0%
+   Created on : Sun Feb 25 23:26:32 CET 2024
+   Expires on : Mon Feb 26 03:19:52 CET 2024
+     Lifetime : 4 hours
+         Hash : bvt2aALW
+ Save session : false
+       Editor : https://www.oetec.com/pastebin/bvt2aALW
+        Lined : https://www.oetec.com/pastebin/lined/bvt2aALW
+        Plain : https://www.oetec.com/pastebin/plain/bvt2aALW
+
+Sending: /tmp/foobar.txt
+######################################################## 100.0%
+   Created on : Sun Feb 25 23:26:32 CET 2024
+   Expires on : Mon Feb 26 03:19:52 CET 2024
+     Lifetime : 4 hours
+         Hash : bvt2a33j
+ Save session : false
+       Editor : https://www.oetec.com/pastebin/bvt2a33j
+        Lined : https://www.oetec.com/pastebin/lined/bvt2a33j
+        Plain : https://www.oetec.com/pastebin/plain/bvt2a33j
+
+
+Output format: plain
+
+https://www.oetec.com/pastebin/plain/bvt2aALW
+https://www.oetec.com/pastebin/plain/bvt2a33j
+```
+
 ---
 
 ### History
