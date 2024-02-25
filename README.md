@@ -42,7 +42,7 @@ You can save the current session and set the expire date:
 The history is saved in `"$HOME"/ppaste/history`
 
 
-### Display format for links
+### Display format
 The server generates 3 links: **editor**, **plain** and **lined**.
 
 You can choose which links to display after all files are pasted.
