@@ -2,6 +2,7 @@ Version 0.5.20
     - fixed help_page errors
     - removed force_upgrade
     - improved version check in the upgrade function
+    - improved 'upgrade' so now download the script once
 
 Version 0.5.19
     - show_history_table now print '-' = COLUMNS

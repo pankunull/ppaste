@@ -559,14 +559,18 @@ upgrade()
 
 
     ## Upgrade
-    if ! "$cmd" --url "$github_source" \
-                 --output /tmp/"$script_name".new; then
-        error "curl failed"
-    fi
+    #if ! "$cmd" --url "$github_source" \
+    #             --output /tmp/"$script_name".new; then
+    #    error "curl failed" 1
+    #fi
 
-    printf "\nFile downloaded to: %s\n" "$(ls /tmp/"$script_name".new)"
+    # Instead of curling the script again from the server just redirect
+    # the content of 'source_version' to the file
+    echo "$source_version" >> /tmp/"$script_name".new
 
-    printf "Do you want to overwrite the current script? [y/N]: "
+    printf "\nScript saved in: %s\n" "$(ls /tmp/"$script_name".new)"
+
+    printf "Do you want to overwrite the current one? [y/N]: "
 
     read -r choice
 
