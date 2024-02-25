@@ -508,7 +508,7 @@ upgrade()
 
     ### Check if source is reachable
 
-    if ! server_source=$cmd --url "$github_source"; then
+    if ! server_source="$($cmd --url "$github_source")"; then
         error "can't fetch source code" 1
     elif ! server_hash="$($cmd --url "$github_hash" | cut -d ' ' -f1)"; then
         error "can't fetch signature" 1
