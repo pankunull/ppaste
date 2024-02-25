@@ -560,7 +560,7 @@ upgrade()
 
 
     ## Upgrade
-    printf "%s\n" "$server_source" >> /tmp/"$script_name".new
+    cat <<< "$server_source" > /tmp/"$script_name".new
 
     ## Hash check
     new_version_hash="$(sha256sum /tmp/"${script_name}".new | cut -d ' ' -f1)"
