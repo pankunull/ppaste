@@ -46,7 +46,7 @@ The server generates 3 links:
 + plain: direct link to the file
 + lined: display line numbers
 
-If you want to display all links at the end of paste you can use `--output-format` or short `-o`.
+If you want to display all links when all files are uploaded you can use `--output-format` or short `-o`.
 
 ```
 ./ppaste.sh --output-format plain file1 file2
