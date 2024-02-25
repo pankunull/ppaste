@@ -20,7 +20,7 @@
 # Variables
 ###############################################################
 
-version="0.5.20"
+version="0.5.19"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
@@ -503,48 +503,45 @@ check_link()
 
 upgrade()
 {
-    force_flag="$1"
-
     ### Check if source is reachable
     if ! server_version="$($cmd --url "$github_source")"; then
         error "curl failed" 1
     fi
 
-    if [ "$force_flag" = "0" ]; then
 
-        ### Grab version
-        server_version="$(echo "$server_version" |\
-                          grep -m 1 "version" |\
-                          cut -d '=' -f2 |\
-                          tr -d '"')"
-
-
-        ### Check if the new version has been grabbed
-        if [ -z "$server_version" ]; then
-            error "can't fetch version" 1
-        fi
-        
-
-        server_hash="$($cmd --url $github_hash | cut -d ' ' -f1)"
+    ### Grab version
+    server_version="$(echo "$server_version" |\
+                      grep -m 1 "version" |\
+                      cut -d '=' -f2 |\
+                      tr -d '"')"
 
 
-        printf "Local version  : %s\n%s\n\n" "$version" "$script_hash"
-        printf "Latest version : %s\n%s\n\n" "$server_version" "$server_hash"
-
-
-        ### Check version
-        if [ "$(echo "$version" | tr -d '.')" = \
-             "$(echo "$server_version" | tr -d '.')" ]; then
-            printf "Up-to-date\n\n"
-
-            if [ "$server_hash" != "$script_hash" ]; then
-                printf "WARNING: version is up-to-date but the hash doesn't match.\n"
-                printf "\t You are using a modified version of the script.\n\n"
-            fi
-
-            exit 0
-        fi
+    ### Check if the new version has been grabbed
+    if [ -z "$server_version" ]; then
+        error "can't fetch version" 1
     fi
+    
+
+    server_hash="$($cmd --url $github_hash | cut -d ' ' -f1)"
+
+
+    printf "Local version  : %s\n%s\n\n" "$version" "$script_hash"
+    printf "Latest version : %s\n%s\n\n" "$server_version" "$server_hash"
+
+
+    ### Check version
+    if [ "$(echo "$version" | tr -d '.')" = \
+         "$(echo "$server_version" | tr -d '.')" ]; then
+        printf "Up-to-date\n\n"
+
+        if [ "$server_hash" != "$script_hash" ]; then
+            printf "WARNING: version is up-to-date but the hash doesn't match.\n"
+            printf "\t You are using a modified version of the script.\n\n"
+        fi
+
+        exit 0
+    fi
+
 
     printf "Do you want to upgrade? [y/N]: "
     read -r choice
@@ -591,6 +588,62 @@ upgrade()
 }
 
 
+
+force_upgrade()
+{
+    ### Check if source is reachable
+    if ! server_version="$($cmd --url "$github_source")"; then
+        error "curl failed" 1
+    fi
+
+
+    printf "Do you want to upgrade? [y/N]: "
+    read -r choice
+
+    case "$choice" in
+        [yY][eE][sS]|[yY])
+            ;;
+        *)
+            printf "Aborting\n"
+            exit 0
+            ;;
+    esac
+
+
+    ### Upgrade
+    if ! $cmd --url "$github_source" \
+                 --output /tmp/"$script_name".new; then
+        error "curl failed"
+    fi
+
+    printf "\nFile downloaded to: %s\n" "$(ls /tmp/"$script_name".new)"
+
+    printf "Do you want to overwrite the current script? [y/N]: "
+
+    read -r choice
+
+    case "$choice" in
+        [yY][eE][sS]|[yY])
+            ;;
+        *)
+            printf "Aborting"
+            exit 0
+            ;;
+    esac
+
+
+    mv -v "$0" "$0".old
+    mv -v /tmp/"$script_name".new "$script_dir/$script_name"
+    chmod -v +x "$script_dir/$script_name"
+    rm -v "$0".old
+    
+    printf "\nDone!\n\n"
+
+    exit 0
+}
+
+
+
 help_page()
 {
     printf "Usage: %s [OPTIONS] <file1> <file...>\n\n" "$script_name"
@@ -602,22 +655,22 @@ help_page()
     printf " %-${help_width}s Save session in history\n" "-s, --save-session"
 
     printf "\nOutput:\n"
-    printf " %-${help_width}s Print links at the end of the session\n" "-o, --output-format <FORMAT>"
+    printf " %-${help_width}s Print links at the end of the session\n" "-o, --output-format FORMAT"
     printf " %-${help_width}s FORMAT is 'all', 'editor', 'plain', 'lined'\n" " "
     
     printf "\nHistory:\n"
-    printf " %-${help_width}s Show normal history (links)\n" "-l, --history <FORMAT>"
-    printf " %-${help_width}s Show formatted history (table)\n" "-L, --history-table <FORMAT>"
+    printf " %-${help_width}s Show normal history (links)\n" "-l, --history FORMAT"
+    printf " %-${help_width}s Show formatted history (table)\n" "-L, --history-table FORMAT"
     printf " %-${help_width}s FORMAT is 'alive', 'dead', 'all'\n" " "
     printf " %-${help_width}s Delete history\n" "-r, --delete-history"
 
     printf "\nDownload:\n"
-    printf " %-${help_width}s Download file using url or hash\n" "-d, --download <link|hash|...>"
+    printf " %-${help_width}s Download file using url or hash\n" "-d, --download [<url> <hash>]"
     printf " %-${help_width}s Download alive links\n" "-D, --download-alive"
     printf " %-${help_width}s Delete download folder\n" "-R, --delete-download"
 
     printf "\nUtilities:\n"
-    printf " %-${help_width}s Check expiration date via url or hash\n" "-c, --check <link|hash|...>"
+    printf " %-${help_width}s Check expiration date via url or hash\n" "-c, --check <[url] [hash]>"
 
     printf "\nMisc:\n"
     printf " %-${help_width}s Upgrade\n" "-u, --upgrade"

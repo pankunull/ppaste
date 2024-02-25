@@ -1,3 +1,7 @@
+Version 0.5.20
+    - fixed help_page errors
+    - removed force_upgrade
+
 Version 0.5.19
     - show_history_table now print '-' = COLUMNS
 
