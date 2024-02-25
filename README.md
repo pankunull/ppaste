@@ -130,8 +130,8 @@ To download all the links that are still alive:
 ./ppaste.sh --download-alive
 ```
 
-
-NOTE: The script checks for duplicates when downloading.
+> [!NOTE]
+> The script checks for duplicates when downloading.
 
 
 ## Credits
