@@ -45,4 +45,6 @@ NOTE: The script checks for duplicates when downloading.
 
 
 ## Credits
-o1, blastwave and deesix
+Pastebin: o1
+2nd mirror: blastwave
+Coding: deesix
