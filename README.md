@@ -15,7 +15,8 @@ Using Github:
 - cd into 'src'
 - run the script
 
-Via 2nd mirror:
+
+Using genunix server:
 - script: `curl -4 -L --url "https://www.genunix.com/panku/ppaste/ppaste.sh" -O`
 - sha256: `curl -4 -L --url "https://www.genunix.com/panku/ppaste/sha256sum.txt" -O`
 - run the script
