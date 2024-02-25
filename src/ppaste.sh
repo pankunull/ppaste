@@ -507,34 +507,34 @@ upgrade()
     force_flag="$1"
 
     ### Check if source is reachable
-    if ! server_version="$($cmd --url "$github_source")"; then
+
+    if ! server_source="$($cmd --url "$github_source")"; then
+        error "curl failed" 1
+    elif ! server_hash="$($cmd --url "$github_hash" | cut -d ' ' -f1)"; then
         error "curl failed" 1
     fi
 
+    ### Force flag is required if '--force-upgrade' is invoked
     if [ "$force_flag" = "0" ]; then
 
         ### Grab version
-        server_version="$(echo "$server_version" |\
+        server_source="$(echo "$server_source" |\
                           grep -m 1 "version" |\
                           cut -d '=' -f2 |\
                           tr -d '"')"
 
 
         ### Check if the new version has been grabbed
-        if [ -z "$server_version" ]; then
+        if [ -z "$server_source" ]; then
             error "can't fetch version" 1
         fi
         
-
-        server_hash="$($cmd --url $github_hash | cut -d ' ' -f1)"
-
-
         printf "Local version  : %s\n%s\n\n" "$version" "$script_hash"
-        printf "Latest version : %s\n%s\n\n" "$server_version" "$server_hash"
+        printf "Latest version : %s\n%s\n\n" "$server_source" "$server_hash"
 
 
         ### Check version
-        if [ "$version" = "$server_version" ]; then
+        if [ "$version" = "$server_source" ]; then
             printf "Up-to-date\n\n"
 
             if [ "$server_hash" != "$script_hash" ]; then
@@ -560,13 +560,14 @@ upgrade()
 
 
     ## Upgrade
-    echo "$server_version" >> /tmp/"$script_name".new
+    echo "$server_source" >> /tmp/"$script_name".new
 
     ## Hash check
     new_version_hash="$(sha256sum /tmp/"${script_name}".new | cut -d ' ' -f1)"
 
     if [ "$new_version_hash" != "$server_hash" ]; then
-        printf "ATTENTION: the file downloaded is compromised\n"
+        printf "\nWARNING: the file downloaded might be compromised\n"
+        printf "Aborting...\n"
         rm -v -i /tmp/"${script_name}".new
         exit 1
     fi
