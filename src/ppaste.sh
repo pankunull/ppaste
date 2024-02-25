@@ -559,14 +559,16 @@ upgrade()
 
 
     ## Upgrade
-    #if ! "$cmd" --url "$github_source" \
-    #             --output /tmp/"$script_name".new; then
-    #    error "curl failed" 1
-    #fi
-
-    # Instead of curling the script again from the server just redirect
-    # the content of 'source_version' to the file
     echo "$source_version" >> /tmp/"$script_name".new
+
+    ## Hash check
+    new_version_hash="$(sha256sum /tmp/${script_name}.new | cut -d ' ' -f1)"
+
+    if [ "$(sha256sum /tmp/${script_name}.new)" != "$server_hash" ]; then
+        printf "ATTENTION: the file downloaded is compromised\n"
+        rm -v -i /tmp/${script_name}.new
+        exit 1
+    fi
 
     printf "\nScript saved in: %s\n" "$(ls /tmp/"$script_name".new)"
 
