@@ -36,7 +36,7 @@ To just paste a file:
 ```
 ./ppaste.sh file1
 
-Sending: /tmp/foobar.txt
+Sending: file1
 ######################################################## 100.0%
    Created on : Sun Feb 25 23:28:48 CET 2024
    Expires on : Mon Feb 26 03:22:08 CET 2024
