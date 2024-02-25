@@ -10,11 +10,15 @@ ppaste is a POSIX bash script that paste files at oetec.com/pastebin via shell.
 
 
 ## Installation
+Using Github:
 - clone the git repository
 - cd into 'src'
 - run the script
 
-Or alternatively you can copy/link it anywhere in the system.
+Via 2nd mirror:
+- script: `curl -4 -L --url "https://www.genunix.com/panku/ppaste/ppaste.sh" -O
+- sha256: `curl -4 -L --url "https://www.genunix.com/panku/ppaste/sha256sum.txt" -O 
+- run the script
 
 
 ## Usage
