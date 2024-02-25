@@ -135,8 +135,6 @@ NOTE: The script checks for duplicates when downloading.
 
 
 ## Credits
-o1 : pastebin / testing
-
-blastwave : genunix.com mirror
-
-deesix : testing / review
++ o1 `pastebin / testing`
++ blastwave `genunix.com mirror`
++ deesix `testing / review`
