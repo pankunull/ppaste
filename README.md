@@ -40,7 +40,7 @@ You can save the current session and set the expire date:
 ```
 The history is saved in `"$HOME"/ppaste/history`
 
-After the file is sent the server will generate 3 links: *editor*, *plain* and *lined*
+The server generates 3 links: **editor**, **plain** and **lined**.
 
 You can choose which links to display at the end using: 
 
