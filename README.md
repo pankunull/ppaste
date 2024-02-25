@@ -2,6 +2,7 @@
 
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/pankunull/ppaste/main/docs/screenshot.png">
+<img alt="ppaste screenshot" src="https://raw.githubusercontent.com/pankunull/ppaste/main/docs/screenshot.png">
 </picture>
 
 ## Description
