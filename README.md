@@ -24,14 +24,14 @@ ppaste is a POSIX bash script that paste files at oetec.com/pastebin via shell.
 
 ## Usage
 
-+ To display the help page: 
+To display the help page: 
 
 ```
 ./ppaste.sh --help
 ```
 
 
-+ Paste file: 
+Paste file: 
 
 ```
 ./ppaste.sh file1
@@ -50,7 +50,7 @@ Sending: file1
 ```
 
 
-+ You can save the current session and set the expire date: 
+You can save the current session and set the expire date: 
 
 ```
 ./ppaste.sh --save-session --expire-time 7 file1 file2
