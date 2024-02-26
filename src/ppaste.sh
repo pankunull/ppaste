@@ -560,7 +560,7 @@ upgrade()
 
 
     ## Upgrade
-    if ! "$cmd" --url "$github_source" > /tmp/"$script_name".new; then
+    if ! $cmd --url "$github_source" > /tmp/"$script_name".new; then
         error "can't download source code" 1
     fi
 
