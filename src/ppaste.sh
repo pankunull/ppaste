@@ -570,7 +570,7 @@ upgrade()
 
     if [ "$new_version_hash" != "$server_hash" ]; then
         printf "\nWARNING: the file downloaded might be compromised\n"
-        printf "Aborting...\n"
+        printf "Aborting\n"
         rm -v -i /tmp/"${script_name}".new
         exit 1
     fi
@@ -585,7 +585,7 @@ upgrade()
         [yY][eE][sS]|[yY])
             ;;
         *)
-            printf "Aborting"
+            printf "Aborting\n"
             exit 0
             ;;
     esac
