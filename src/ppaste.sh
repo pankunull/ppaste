@@ -560,7 +560,10 @@ upgrade()
 
 
     ## Upgrade
-    cat <<< "$server_source" > /tmp/"$script_name".new
+    if ! "$cmd" --url "$github_source" > /tmp/"$script_name".new; then
+        error "can't download source code" 1
+    fi
+
 
     ## Hash check
     new_version_hash="$(sha256sum /tmp/"${script_name}".new | cut -d ' ' -f1)"
