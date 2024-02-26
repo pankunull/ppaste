@@ -16,9 +16,10 @@ ppaste is a POSIX bash script that paste files at oetec.com/pastebin via shell.
 - run the script
 
 
-### Using genunix server:
-- script: `curl -4 -L --url "https://www.genunix.com/panku/ppaste/ppaste.sh" -O`
-- sha256: `curl -4 -L --url "https://www.genunix.com/panku/ppaste/sha256sum.txt" -O`
+### Via genunix server:
+- script: https://www.genunix.com/panku/ppaste/ppaste.sh
+- sha256: https://www.genunix.com/panku/ppaste/sha256sum.txt
+- `curl -4 -L --url "https://www.genunix.com/panku/ppaste/ppaste.sh" -O`
 - run the script
 
 
