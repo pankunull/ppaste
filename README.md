@@ -6,7 +6,7 @@
 </picture>
 
 ## Description
-ppaste is a POSIX bash script that paste files at oetec.com/pastebin via shell.
+ppaste is a POSIX bash script that paste files to oetec.com/pastebin.
 
 
 ## Installation
