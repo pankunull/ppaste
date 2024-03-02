@@ -1,3 +1,6 @@
+Version 0.5.21
+    - added pipe/redirect option
+
 Version 0.5.20
     - fixed help_page errors
     - improved help_page

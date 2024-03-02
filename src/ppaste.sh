@@ -20,7 +20,7 @@
 # Variables
 ###############################################################
 
-version="0.5.20"
+version="0.5.21"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
@@ -43,6 +43,7 @@ lifetime=0
 format=none
 
 file_flag=0
+redirect_flag=0
 
 file_max_size=300000000
 
@@ -606,8 +607,8 @@ help_page()
     printf "Usage: %s [OPTIONS] <file1> <file...>\n\n" "$script_name"
     
     printf "Options:\n"
-    #printf " %-${help_width}s Files to paste\n" "-f, --files"
-    printf " %-${help_width}s Expire time (w/given is 4 hours)\n" "-e, --expire-time NUM"
+    printf " %-${help_width}s Paste pipe and redirections\n" "-t, --redirect"
+    printf " %-${help_width}s Expire time (w/given is 4 hours)\n" "-e, --expire-time"
     printf " %-${help_width}s NUM is '0' for 4 hours and '1-7' for days\n" " "
     printf " %-${help_width}s Save session in history\n" "-s, --save-session"
     printf " %-${help_width}s Don't save session\n" "-S, --no-save"
@@ -641,6 +642,7 @@ help_page()
     printf " %s file1.txt file2.txt\n" "$script_name"
     printf " %s --save-session -e 1 file1.txt file2.txt\n" "$script_name"
     printf " %s file1.txt -e 1 -s file2.txt\n" "$script_name"
+    printf " %s -e 7 -t < /tmp/file1.txt"
     printf "\n"
 
     exit 0
@@ -666,22 +668,27 @@ file_upload()
     file="$1"
 
     ### Payload check
-    if ! [ -f "$file" ]; then
-        error "'$file' doesn't exist" ; echo
-        return
-    elif ! [ -r "$file" ]; then
-        error "'$file' is not readable" ; echo 
-        return
-    elif ! [ -s "$file" ]; then
-        error "'$file' is empty" ; echo
-        return
-    elif [ ! "$(wc -c < "$file")" -lt "$file_max_size" ]; then
-        error "'$file' exceeds size limit ($((file_max_size / 1000000)) MB)" ; echo
-        return
+    if [ "$redirect_flag" -eq 1 ]; then
+        file='redirected input'
+        file_to_upload="pastefile=@-"
     else
-        file_to_upload="pastefile=@$file"
-        file_flag=1
-    fi 
+        if ! [ -f "$file" ]; then
+            error "'$file' doesn't exist" ; echo
+            return
+        elif ! [ -r "$file" ]; then
+            error "'$file' is not readable" ; echo 
+            return
+        elif ! [ -s "$file" ]; then
+            error "'$file' is empty" ; echo
+            return
+        elif [ ! "$(wc -c < "$file")" -lt "$file_max_size" ]; then
+            error "'$file' exceeds size limit ($((file_max_size / 1000000)) MB)" ; echo
+            return
+        else
+            file_to_upload="pastefile=@$file"
+            file_flag=1
+        fi
+    fi
 
 
     ### Initializing
@@ -835,7 +842,7 @@ error_arg()
 
 
 ### Using variables to store arguments
-ARG_OPTIONS="e expire-time f files s save-session S no-save"
+ARG_OPTIONS="e expire-time t redirect s save-session S no-save"
 ARG_FORMAT="o output-format"
 ARG_HISTORY="l history L history-table r delete-history"
 ARG_DOWNLOAD="d download-url D download-hash R delete-download"
@@ -876,6 +883,11 @@ done
 while [ $# -gt 0 ]; do
     case "$1" in
         # Options
+        -t|--redirect)
+                shift 1
+                redirect_flag=1
+                file_upload
+                ;;
         -e|--expire-time)
                 shift 1
                 expire_time "$1"
@@ -937,11 +949,17 @@ while [ $# -gt 0 ]; do
         *)
                 file_upload "$1"
                 ;;
-    esac ; shift
+    esac
+
+    if [ "$redirect_flag" -eq 1 ]; then
+       break
+    else 
+        shift
+    fi
 
 done
 
-if [ "$file_flag" = 0 ]; then
+if [ "$file_flag" -eq 0 ] && [ "$redirect_flag" -eq 0 ]; then
     usage
 fi
 
