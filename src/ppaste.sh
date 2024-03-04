@@ -20,7 +20,10 @@
 # Variables
 ###############################################################
 
-version="0.5.21"
+version="0.5.22"
+
+machine="$(uname -m)"
+proc="$(uname -o)"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
@@ -651,8 +654,10 @@ help_page()
 
 version()
 {
-    printf "Version: %s\n" "$version"
-    printf "%s\n\n" "$script_hash"
+    printf "Version : %s\n" "$version"
+    printf "Hash    : %s\n\n" "$script_hash"
+
+    printf "%s %s (%s %s)\n" "$script_name" "$version" "$machine" "$proc"
 
     exit 0
 }
