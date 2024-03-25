@@ -632,7 +632,7 @@ help_page()
     printf " %-${help_width}s Delete download folder\n" "-R, --delete-download"
 
     printf "\nUtilities:\n"
-    printf " %-${help_width}s Check paste informations\n" "-c, --check <link1|hash1|...2>"
+    printf " %-${help_width}s Check paste information\n" "-c, --check <link1|hash1|...2>"
 
     printf "\nMisc:\n"
     printf " %-${help_width}s Upgrade\n" "-u, --upgrade"
