@@ -90,17 +90,17 @@ save_session()
         else
             error "failed to create history file" 1
         fi
-    fi 
-    
+    fi
+
     save_session=1
 }
 
 
 expire_time()
-{   
+{
     case "$1" in
         ''|*[!0-7]*)
-            error "expire value has to be between 0 and 7" 1 
+            error "expire value has to be between 0 and 7" 1
             ;;
         *) lifetime="$1" ;;
     esac
@@ -119,7 +119,7 @@ output_format()
         plain) format='plain'  ;;
         lined) format='lined'  ;;
             *)
-                error "format not valid" 
+                error "format not valid"
                 usage
                 ;;
     esac
@@ -137,10 +137,10 @@ show_history()
         error "history file doesn't exist" 1
     elif [ -z "$history_file" ]; then
         error "history is empty" 1
-    fi 
-        
+    fi
+
     printf "Grabbing history from '%s'\n\n" "$history_file"
-        
+
     case "$1" in
         alive) history_links="$(awk -F\| '$3 > '"$(date +%s)"'' "$history_file")" ;;
       expired) history_links="$(awk -F\| '$3 < '"$(date +%s)"'' "$history_file")" ;;
@@ -171,7 +171,7 @@ show_history_table()
         error "history file doesn't exist" 1
     elif [ -z "$history_file" ]; then
         error "history is empty" 1
-    fi 
+    fi
 
     printf "Grabbing history from '%s'\n\n" "$history_file"
 
@@ -206,7 +206,7 @@ show_history_table()
     echo "$history_links" | \
 
     awk 'BEGIN {FS=OFS="|";}
-               {$2 = strftime("%c %Z", $2); $3 = strftime("%c %Z", $3); } 
+               {$2 = strftime("%c %Z", $2); $3 = strftime("%c %Z", $3); }
                {print}' | \
     awk -F '|' '{ if ($4 == "1")    $4="1 day     "  }1' OFS='|' | \
     awk -F '|' '{ if (int($4) > 1 ) $4=$4" days    " }1' OFS='|' | \
@@ -230,7 +230,7 @@ delete_history()
 {
     if ! [ -f "$history_file" ]; then
         error "history file doesn't exist" 1
-    fi 
+    fi
 
     printf "Are you sure you want to delete the history? [y/N]: "
 
@@ -269,7 +269,7 @@ download()
 
     if [ ! -d "$download_dir" ]; then
         printf "Creating download folder: %s\n\n" "$download_dir"
-    
+
         if ! mkdir -p "$download_dir"; then
             error "can't create the download folder" 1
         fi
@@ -293,12 +293,12 @@ download()
             printf "error: '%s' is not a valid link or hash\n\n" "$link"
             continue
         fi
-        
+
 
         if ! headers="$($cmd -I --url "$download_link")"; then
             error  "curl error" 1
         fi
-            
+
         if ! echo "$headers" | grep --silent -q -v 'Expires'; then
             error "paste not found on the server" 1
         fi
@@ -331,7 +331,7 @@ download_alive()
 
     if ! [ -f "$history_file" ]; then
         error "history file doesn't exist" 1
-    fi 
+    fi
 
     printf "Grabbing history from '%s'\n\n" "$history_file"
 
@@ -341,14 +341,14 @@ download_alive()
         printf "No history found\n\n"
         exit 0
     fi
-    
+
     if [ ! -d "$download_dir" ]; then
         printf "Creating download folder in %s\n\n" "$download_dir"
-    
+
         if ! mkdir -p "$download_dir" 2>&1; then
             error "can't create the download folder" 1
         fi
-    
+
     fi
 
     printf "Downlaod dir: %s\n\n" "$download_dir"
@@ -401,7 +401,7 @@ delete_download()
 {
     if ! [ -f "$history_file" ]; then
         error "history file doesn't exist" 1
-    fi 
+    fi
 
     printf "Are you sure you want to delete the download folder? [y/N]: "
 
@@ -431,7 +431,7 @@ check_link()
 {
     #links="$1"
 
-    for link in $1; do 
+    for link in $1; do
 
         ### Check if the link is valid using grep
         ### If the header contains the expiration date it's a valid link
@@ -447,13 +447,13 @@ check_link()
             error "not a valid link or hash"
             continue
         fi
-        
+
 
         if ! headers="$($cmd -I --url "$download_link")"; then
             error  "curl error"
             continue
         fi
-            
+
         if ! echo "$headers" | grep -q 'Expires'; then
             error "paste not valid or expired"
             continue
@@ -532,7 +532,7 @@ upgrade()
         if [ -z "$server_version" ]; then
             error "can't fetch version" 1
         fi
-        
+
         printf "Local version  : %s\n%s\n\n" "$version" "$script_hash"
         printf "Latest version : %s\n%s\n\n" "$server_version" "$server_hash"
 
@@ -608,7 +608,7 @@ upgrade()
 help_page()
 {
     printf "Usage: %s [OPTIONS] <file1> <file...>\n\n" "$script_name"
-    
+
     printf "Options:\n"
     printf " %-${help_width}s Paste pipe and redirections\n" "-t, --redirect"
     printf " %-${help_width}s Expire time (w/given is 4 hours)\n" "-e, --expire-time"
@@ -619,7 +619,7 @@ help_page()
     printf "\nOutput:\n"
     printf " %-${help_width}s Display links at the end\n" "-o, --output-format <FORMAT>"
     printf " %-${help_width}s FORMAT is 'all', 'editor', 'plain', 'lined'\n" " "
-    
+
     printf "\nHistory:\n"
     printf " %-${help_width}s Display simple history (show links)\n" "-l, --history <FORMAT>"
     printf " %-${help_width}s Display formatted history (link,date,lifetime,filename)\n" "-L, --history-table <FORMAT>"
@@ -632,7 +632,7 @@ help_page()
     printf " %-${help_width}s Delete download folder\n" "-R, --delete-download"
 
     printf "\nUtilities:\n"
-    printf " %-${help_width}s Check paste informations\n" "-c, --check <link1|hash1|...2>"
+    printf " %-${help_width}s Check paste information\n" "-c, --check <link1|hash1|...2>"
 
     printf "\nMisc:\n"
     printf " %-${help_width}s Upgrade\n" "-u, --upgrade"
@@ -681,7 +681,7 @@ file_upload()
             error "'$file' doesn't exist" ; echo
             return
         elif ! [ -r "$file" ]; then
-            error "'$file' is not readable" ; echo 
+            error "'$file' is not readable" ; echo
             return
         elif ! [ -s "$file" ]; then
             error "'$file' is empty" ; echo
@@ -698,8 +698,8 @@ file_upload()
 
     ### Initializing
     printf "Sending: %s\n" "$file"
-    
-    
+
+
     ### Liftoff
     payload="$(COLUMNS=63 \
                 curl --progress-bar --output - -# \
@@ -708,9 +708,9 @@ file_upload()
                 --form days="$lifetime" \
                 --form "$file_to_upload" \
                 https://www.oetec.com/post)"
- 
 
-    ### Error code 
+
+    ### Error code
     #if [ "$?" -gt 0 ]; then
     if ! [ "$?" ]; then
         error "curl failed" 1
@@ -728,7 +728,7 @@ file_upload()
     fi
 
 
-    ### Payload's informations
+    ### Payload's information
     ### Time
     epoch_create_time="$(date +%s)"
     date_create_time="$(date --date @"$epoch_create_time" 2>/dev/null || \
@@ -797,7 +797,7 @@ file_upload()
 
     ### Links format
     case "$format" in
-        all) 
+        all)
             link_list="$(printf "%s\n%s\n%s\n%s\n" "$link_list" "$link_editor" "$link_lined" "$link_plain")"
             ;;
         editor)
@@ -812,7 +812,7 @@ file_upload()
         none)
             return ;;
     esac
-         
+
 }
 
 
@@ -836,7 +836,7 @@ if [ "$#" -lt 1 ]; then
 fi
 
 
-### Error function to prevent repetition 
+### Error function to prevent repetition
 error_arg()
 {
     printf "%s: %s unrecognized option\n" "$script_name" "$1"
@@ -866,7 +866,7 @@ for arg in "$@"; do
     arg_double_quote="$(printf "%s" "$arg" | cut -c -2)"
         arg_long_cmd="$(printf "%s" "$arg" | cut -c 3-)"
 
-    if [ "$arg_double_quote" = "--" ] ; then 
+    if [ "$arg_double_quote" = "--" ] ; then
         if ! echo "$OPTARG" | grep -q -o " $arg_long_cmd " ; then
             error_arg "$arg"
         fi
@@ -927,7 +927,7 @@ while [ $# -gt 0 ]; do
                 ;;
         -D|--download-alive)
                 shift 1
-                download_alive 
+                download_alive
                 ;;
         -R|--delete-download)
                 shift 1
@@ -958,7 +958,7 @@ while [ $# -gt 0 ]; do
 
     if [ "$redirect_flag" -eq 1 ]; then
        break
-    else 
+    else
         shift
     fi
 
