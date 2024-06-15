@@ -7,7 +7,7 @@
 # Source code is hosted on : "https://www.github.com/pankunull/ppaste"
 
 # Alternative mirror       : "https://www.genunix.com/panku/ppaste/ppaste.sh"
-# Sha256sum                : "https://www.genunix.com/panku/ppaste/sha256sum.txt"
+# Sha256                   : "https://www.genunix.com/panku/ppaste/sha256.txt"
 
 # Pastebin is hosted on    : "https://www.oetec.com/pastebin"
 
@@ -23,14 +23,15 @@
 version="0.5.22"
 
 machine="$(uname -m)"
-proc="$(uname -o)"
+proc="$(uname -s)"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
-script_hash="$(sha256sum "$script_dir/$script_name" | cut -d ' ' -f1)"
+script_hash="$(cat "$script_dir/$script_name" | openssl sha256 | cut -d ' ' -f2)"
+
 
 github_source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
-github_hash='https://raw.githubusercontent.com/pankunull/ppaste/main/sign/sha256sum.txt'
+github_hash='https://raw.githubusercontent.com/pankunull/ppaste/main/sign/sha256.txt'
 
 pastebin=https://www.oetec.com/pastebin
 
@@ -570,7 +571,7 @@ upgrade()
 
 
     ## Hash check
-    new_version_hash="$(sha256sum /tmp/"${script_name}".new | cut -d ' ' -f1)"
+    new_version_hash="$(cat /tmp/"${script_name}".new | openssl sha256 | cut -d ' ' -f2)"
 
     if [ "$new_version_hash" != "$server_hash" ]; then
         printf "\nWARNING: the file downloaded might be compromised\n"
