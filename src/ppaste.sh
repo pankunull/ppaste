@@ -23,7 +23,7 @@
 version="0.5.23"
 
 machine="$(uname -m)"
-proc="$(uname -s)"
+proc="$(uname -o)"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
