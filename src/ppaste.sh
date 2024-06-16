@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Written by: panku
-# Thanks to: o1, deesix, blastwave
+# Thanks to: o1, deesix, blastwave, herrhotzenplotz
 
 
 # Source code is hosted on : "https://www.github.com/pankunull/ppaste"
