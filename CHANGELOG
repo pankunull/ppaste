@@ -1,3 +1,7 @@
+Version 0.5.23
+    - fixed POSIX issue with 'uname' command on NetBSD (thanks to Nico)
+    - changed sign from 'sha256sum' to openssl
+
 Version 0.5.22
     - added more informations to version()
  
