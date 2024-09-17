@@ -27,7 +27,7 @@ proc="$(uname -s)"
 
 script_name="$(basename "$0")"
 script_dir="$(dirname "$0")"
-script_hash="$("$script_dir/$script_name" < openssl sha256 | cut -d ' ' -f2)"
+script_hash="$(openssl sha256 < "$script_dir"/"$script_name" | cut -d ' ' -f2)"
 
 
 github_source='https://raw.githubusercontent.com/pankunull/ppaste/main/src/ppaste.sh'
@@ -571,7 +571,7 @@ upgrade()
 
 
     ## Hash check
-    new_version_hash="$(/tmp/"${script_name}".new < openssl sha256 | cut -d ' ' -f2)"
+    new_version_hash="$(openssl sha256 < /tmp/"${script_name}".new | cut -d ' ' -f2)"
 
     if [ "$new_version_hash" != "$server_hash" ]; then
         printf "\nWARNING: the file downloaded might be compromised\n"
